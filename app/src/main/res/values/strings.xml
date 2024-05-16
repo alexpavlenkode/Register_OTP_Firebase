@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Register OTP</string>
+    <string name="select_role">Выберите свою роль!</string>
+    <string name="customer">Заказчик</string>
+    <string name="executor">Исполнитель</string>
+    <string name="continue_text">Продолжить</string>
+    <string name="phone">телефон</string>
+    <string name="firstname_lastname">имя и фамилия</string>
+    <string name="password">пароль</string>
+    <string name="company_name">фирменное имя</string>
+    <string name="work_experience">опыт работ</string>
+    <string name="link_of_site">ссылка на сайт</string>
+    <string name="service_radius">индекс и радиус зоны обслуживания</string>
+    <string name="contact_info">контактная информация</string>
+    <string name="about_me">о себе</string>
+    <string name="service_category">категории услуг</string>
+    <string name="legal_representation">юридическое представление</string>
+    <string name="enter_otp">Введите смс-код, отправленный на ваш номер телефона</string>
+    <string name="sms_code">смс-код</string>
+    <string name="resend_sms_code">Повторная отправка смс через 60 сек</string>
+
+    <string name="invalid_phone">Номер телефона не действителен</string>
+    <string name="invalid_name">Имя пользователя недействительно</string>
+    <string name="invalid_password">Пароль не действителен</string>
+
+    <string name="invalid_comp_name">Название компании недействительно</string>
+    <string name="invalid_experience">Опыт работы должен быть не пустым</string>
+    <string name="field_must_be_not_empty">Поле должно быть не пустым</string>
+    <string name="choose_image">Выберите изображение для логотипа</string>
+
+</resources>

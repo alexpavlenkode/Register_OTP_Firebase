@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_nav_graph"
+    app:startDestination="@id/roleFragment">
+
+    <fragment
+        android:id="@+id/roleFragment"
+        tools:layout="@layout/fragment_role"
+        android:name="com.example.registerotp.fragments.RoleFragment"
+        android:label="RoleFragment" >
+        <action
+            android:id="@+id/action_roleFragment_to_loginExecutorFragment"
+            app:destination="@id/loginExecutorFragment" />
+        <action
+            android:id="@+id/action_roleFragment_to_loginCustomerFragment"
+            app:destination="@id/loginCustomerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginCustomerFragment"
+        tools:layout="@layout/fragment_login_customer"
+        android:name="com.example.registerotp.fragments.LoginCustomerFragment"
+        android:label="LoginCustomerFragment" >
+        <action
+            android:id="@+id/action_loginCustomerFragment_to_OTPFragment"
+            app:destination="@id/OTPFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginExecutorFragment"
+        tools:layout="@layout/fragment_login_executor"
+        android:name="com.example.registerotp.fragments.LoginExecutorFragment"
+        android:label="LoginExecutorFragment" >
+        <action
+            android:id="@+id/action_loginExecutorFragment_to_OTPFragment"
+            app:destination="@id/OTPFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/OTPFragment"
+        tools:layout="@layout/fragment_o_t_p"
+        android:name="com.example.registerotp.fragments.OTPFragment"
+        android:label="OTPFragment" />
+</navigation>
