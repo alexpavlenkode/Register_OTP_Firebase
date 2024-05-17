@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="logo_tet_left">#1E1E1E</color>
+    <color name="logo_tet_right">#988D8D</color>
+
     <color name="my_primary">#C8461D</color>
+    <color name="background">#FFFFFF</color>
     <color name="my_secondary">#FFE74C</color>
 
     <color name="black">#FF000000</color>

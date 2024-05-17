@@ -18,7 +18,7 @@
             android:name=".LoginActivity"
             android:windowSoftInputMode="adjustPan|adjustResize"
             android:exported="false" />
-
+        <!-- Definiert die MainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"/>
@@ -26,6 +26,7 @@
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
+                <!-- Definiert die SplashActivity, die als Startaktivität der Anwendung dient -->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
