@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Workers</string>
     <string name="app_name_s">WORKERS</string>
+    <string name="login_email_hint">Name</string>
+    <string name="login_telefon_hint">Telefon</string>
+    <string name="login_button_text">Einlogen</string>
+    <string name="signup_slash">Neu hier?</string>
+    <string name="signup_slash_go_to_registr">Registrieren!</string>
+
+
     <string name="select_role">Выберите свою роль!</string>
     <string name="customer">Заказчик</string>
     <string name="executor">Исполнитель</string>

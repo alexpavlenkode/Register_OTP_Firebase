@@ -2,6 +2,9 @@
 <resources>
     <color name="logo_tet_left">#1E1E1E</color>
     <color name="logo_tet_right">#988D8D</color>
+    <color name="fill_colorF3F3">#F3F3F3</color>
+    <color name="primaryTextColor">#11CFC5</color>
+    <color name="hintColorText">#5B5B5B</color>
 
     <color name="my_primary">#C8461D</color>
     <color name="background">#FFFFFF</color>
@@ -12,7 +15,8 @@
 
     <color name="off_white">#FAFAFA</color>
     <color name="light_gray">#C3C3C3</color>
-
+    <color name="button_not_clicked">#694FEF</color>
+    <color name="blue_link">#1E1E1E</color>
     <color name="chat_color_sender">#1E88E5</color>
     <color name="chat_color_receiver">#7CB342</color>
 </resources>
