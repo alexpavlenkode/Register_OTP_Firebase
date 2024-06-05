@@ -19,7 +19,9 @@ import com.example.registerotp.databinding.FragmentRoleBinding;
 
 
 public class RoleFragment extends Fragment {
+    //Управления навигацией между фрагментами в приложении
     private NavController navController;
+    //привязки представлений (View Binding)
     private FragmentRoleBinding b;
 
     @Override
@@ -34,12 +36,7 @@ public class RoleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
-        b.cardCustomer.setOnClickListener(v -> {
-            navController.navigate(R.id.action_roleFragment_to_loginCustomerFragment);
-        });
 
-        b.cardExecutor.setOnClickListener(v -> {
-            navController.navigate(R.id.action_roleFragment_to_loginExecutorFragment);
-        });
+
     }
 }

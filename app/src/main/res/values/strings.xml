@@ -6,7 +6,7 @@
     <string name="login_button_text">Einlogen</string>
     <string name="signup_slash">Neu hier?</string>
     <string name="signup_slash_go_to_registr">Registrieren!</string>
-
+    <string name="invalid_name">Hoppla! Hier sollte ein Name stehen.</string>
 
     <string name="select_role">Выберите свою роль!</string>
     <string name="customer">Заказчик</string>
@@ -28,7 +28,7 @@
     <string name="resend_sms_code">Повторная отправка смс через 60 сек</string>
 
     <string name="invalid_phone">Номер телефона не действителен</string>
-    <string name="invalid_name">Имя пользователя недействительно</string>
+
     <string name="invalid_password">Пароль не действителен</string>
 
     <string name="invalid_comp_name">Название компании недействительно</string>
