@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean isValid(){
-        if(binding.txtUsername.getEditText().getText().toString().equals("")|| binding.txtUsername.getEditText().getText().toString().length() < 5){
+        if(binding.txtUsername.getEditText().getText().toString().equals("")|| binding.txtUsername.getEditText().getText().toString().length() < 4){
 
             binding.txtUsername.setError(getString(R.string.invalid_name));
             return false;

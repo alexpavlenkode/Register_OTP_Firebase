@@ -7,6 +7,9 @@
     <string name="signup_slash">Neu hier?</string>
     <string name="signup_slash_go_to_registr">Registrieren!</string>
     <string name="invalid_name">Hoppla! Hier sollte ein Name stehen.</string>
+    <string name="back_button">Zurück</string>
+    <string name="notification_message"><b>Noch ein Moment Geduld!</b>\nDer Code trifft in 30 Sekunden auf Ihrem Handy ein</string>
+    <string name="notification_no_sms">Kein Code erhalten?</string>
 
     <string name="select_role">Выберите свою роль!</string>
     <string name="customer">Заказчик</string>

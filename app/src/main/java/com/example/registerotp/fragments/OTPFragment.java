@@ -21,7 +21,7 @@ import android.view.WindowManager;
 import com.example.registerotp.LoginActivity;
 import com.example.registerotp.MainActivity;
 import com.example.registerotp.R;
-import com.example.registerotp.databinding.FragmentLoginCustomerBinding;
+import com.example.registerotp.databinding.FragmentEnterSmsBinding;
 import com.example.registerotp.databinding.FragmentOTPBinding;
 import com.example.registerotp.model.CustomerModel;
 import com.example.registerotp.model.ExecutorModel;

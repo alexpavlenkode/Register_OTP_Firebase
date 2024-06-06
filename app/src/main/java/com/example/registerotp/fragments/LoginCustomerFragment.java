@@ -14,8 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.example.registerotp.R;
-import com.example.registerotp.databinding.FragmentLoginCustomerBinding;
-import com.example.registerotp.databinding.FragmentRoleBinding;
+import com.example.registerotp.databinding.FragmentEnterSmsBinding;
 import com.example.registerotp.model.CustomerModel;
 import com.example.registerotp.utils.AndroidUtil;
 import com.google.firebase.auth.PhoneAuthProvider;
@@ -23,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginCustomerFragment extends Fragment {
 
-    private FragmentLoginCustomerBinding b;
+    private FragmentEnterSmsBinding b;
     private NavController navController;
     private CustomerModel customerModel;
 
@@ -31,7 +30,7 @@ public class LoginCustomerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        b = FragmentLoginCustomerBinding.inflate(inflater, container, false);
+        b = FragmentEnterSmsBinding.inflate(inflater, container, false);
         return b.getRoot();
 
     }
@@ -43,7 +42,7 @@ public class LoginCustomerFragment extends Fragment {
         customerModel = new CustomerModel();
 
         navController = Navigation.findNavController(view);
-        b.loginCountrycode.registerCarrierNumberEditText(b.etPhone);
+        /*b.loginCountrycode.registerCarrierNumberEditText(b.etPhone);
 
         b.btnContinue.setOnClickListener(v -> {
             if (isValid()) {
@@ -71,6 +70,6 @@ public class LoginCustomerFragment extends Fragment {
             b.etPassword.setError(getString(R.string.invalid_password));
             return false;
         }
-        return true;
+        return true;*/
     }
 }
