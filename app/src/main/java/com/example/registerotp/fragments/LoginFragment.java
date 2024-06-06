@@ -1,11 +1,14 @@
 package com.example.registerotp.fragments;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,12 +21,18 @@ import androidx.navigation.Navigation;
 
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentLoginBinding;
+import com.hbb20.CountryCodePicker;
+
+import java.util.Locale;
 
 public class LoginFragment extends Fragment {
 
     private NavController navController;
     private FragmentLoginBinding binding;
     private NestedScrollView nestedScrollView;
+    private LoginFragment loginFragment;
+    private CountryCodePicker ccp;
+    private EditText editTextCarrierNumber;
 
 
     //Этот метод вызывается системой Android, когда фрагмент должен создать свой пользовательский интерфейс
@@ -33,6 +42,8 @@ public class LoginFragment extends Fragment {
         //Раздуваем макет
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         //возвращает корневое представление этого макета, чтобы система Android могла отобразить его
+
+
         return binding.getRoot();
     }
 
@@ -41,6 +52,7 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
 
+
         //устанавливает слушатель нажатий
         binding.smsActivationBtn.setOnClickListener(clickedView  -> {
             //После нажатия отправляем по destination из Navigation
@@ -48,6 +60,15 @@ public class LoginFragment extends Fragment {
                 navController.navigate(R.id.id_action_to_smsActivationFragment);
             }
         });
+
+        loginFragment = this;
+        Locale primaryLocale = loginFragment.getResources().getConfiguration().getLocales().get(0);
+        String country = primaryLocale.getCountry();
+        System.out.println("Country " + country);
+
+        ccp = (CountryCodePicker) binding.ccp;
+        editTextCarrierNumber = (EditText) binding.inputPhoneNumber;
+        ccp.registerCarrierNumberEditText(editTextCarrierNumber);
 
         // Устанавливаем слушатель изменения WindowInsets для вашего представления
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
@@ -87,7 +108,7 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean isValid(){
-        if(binding.txtUsername.getEditText().getText().toString().equals("")|| binding.txtUsername.getEditText().getText().toString().length() < 5){
+        if(binding.txtUsername.getEditText().getText().toString().equals("")|| binding.txtUsername.getEditText().getText().toString().length() < 4){
 
             binding.txtUsername.setError(getString(R.string.invalid_name));
             return false;

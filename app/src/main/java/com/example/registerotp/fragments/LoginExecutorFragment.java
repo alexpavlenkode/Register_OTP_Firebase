@@ -103,7 +103,7 @@ public class LoginExecutorFragment extends Fragment {
                 args.putParcelable("executorModel", executorModel);
 
 
-                navController.navigate(R.id.action_loginExecutorFragment_to_OTPFragment, args);
+                //navController.navigate(R.id.action_loginExecutorFragment_to_OTPFragment, args);
             }
         });
     }

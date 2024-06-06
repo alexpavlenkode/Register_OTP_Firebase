@@ -15,19 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.registerotp.R;
-import com.example.registerotp.databinding.FragmentRoleBinding;
+import com.example.registerotp.databinding.FragmentLoginBinding;
 
 
 public class RoleFragment extends Fragment {
     //Управления навигацией между фрагментами в приложении
     private NavController navController;
     //привязки представлений (View Binding)
-    private FragmentRoleBinding b;
+    private FragmentLoginBinding b;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        b = FragmentRoleBinding.inflate(inflater, container, false);
+        b = FragmentLoginBinding.inflate(inflater, container, false);
         return b.getRoot();
     }
 

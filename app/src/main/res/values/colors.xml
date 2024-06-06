@@ -5,10 +5,14 @@
     <color name="fill_colorF3F3">#F3F3F3</color>
     <color name="primaryTextColor">#11CFC5</color>
     <color name="hintColorText">#5B5B5B</color>
+    <color name="btn_back_color">#A2A2A2</color>
+    <color name="ntf_text">#404B55</color>
+    <color name="ntf_text_shadow">#4D000000</color>
 
     <color name="my_primary">#C8461D</color>
     <color name="background">#FFFFFF</color>
     <color name="my_secondary">#FFE74C</color>
+    <color name="no_sms">#2B58F5</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
