@@ -12,14 +12,15 @@
         android:id="@+id/splasch_logo_png"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/nestedScrollViewGetSMS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/logo_one"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_one" />
 
     <!-- NestedScrollView для прокрутки содержимого -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+        android:id="@+id/nestedScrollViewGetSMS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -93,7 +94,9 @@
                             style="@style/AppTheme.TextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="55dp"
+                            app:errorEnabled="true"
                             android:focusable="true"
+                            android:text="Alex"
                             android:focusableInTouchMode="true"
                             android:imeOptions="actionNext"
                             android:inputType="textCapWords"
@@ -108,7 +111,7 @@
                         android:layout_gravity="center_horizontal">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/textInputLayout"
+                            android:id="@+id/txtUserTelephon"
                             style="@style/AppTheme.TextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -132,6 +135,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:paddingStart="80dp"
+                                android:text="17670188117"
                                 android:focusable="true"
                                 android:focusableInTouchMode="true"
                                 android:imeOptions="actionSend"
@@ -148,7 +152,9 @@
                                 android:layout_gravity="center_vertical"
                                 android:paddingStart="10dp"
                                 app:ccp_autoFormatNumber="true"
-                                app:ccp_countryPreference="de"
+                                app:ccp_countryPreference="de,cz,pl"
+                                app:ccp_defaultPhoneCode="49"
+                                app:ccp_hintExampleNumberType="MOBILE"
                                 app:ccp_showFlag="false"
                                 app:ccp_showNameCode="false" />
 

@@ -22,7 +22,7 @@ import androidx.navigation.Navigation;
 
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentLoginExecutorBinding;
-import com.example.registerotp.model.ExecutorModel;
+import com.example.registerotp.model.FirmenModel;
 import com.example.registerotp.utils.AndroidUtil;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +37,7 @@ import kotlin.jvm.functions.Function1;
 public class LoginExecutorFragment extends Fragment {
     private FragmentLoginExecutorBinding b;
     private NavController navController;
-    private ExecutorModel executorModel;
+    private FirmenModel firmenModel;
     private ActivityResultLauncher<Intent> imagePickLauncher;
     private Uri selectedImageUri;
 
@@ -68,7 +68,7 @@ public class LoginExecutorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        executorModel = new ExecutorModel();
+        firmenModel = new FirmenModel();
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         navController = Navigation.findNavController(view);
@@ -86,21 +86,21 @@ public class LoginExecutorFragment extends Fragment {
 
         b.btnContinue.setOnClickListener(v -> {
             if (isValid()) {
-                executorModel.setCompanyName(b.etCompanyName.getText().toString());
-                executorModel.setPhone(b.loginCountrycode.getFullNumberWithPlus());
-                executorModel.setExperience(Integer.parseInt(b.etExperience.getText().toString()));
-                executorModel.setWebLink(b.etLink.getText().toString());
-                executorModel.setServiceCategory(b.autoCompleteTextView.getText().toString());
-                executorModel.setServiceRadius(Integer.parseInt(b.etServiceRadius.getText().toString()));
-                executorModel.setContactInfo(b.etContactInfo.getText().toString());
-                executorModel.setAboutMe(b.etAboutMe.getText().toString());
-                executorModel.setLegalRepresentation(b.etLegalRepresentation.getText().toString());
+                firmenModel.setCompanyName(b.etCompanyName.getText().toString());
+                firmenModel.setPhone(b.loginCountrycode.getFullNumberWithPlus());
+                firmenModel.setExperience(Integer.parseInt(b.etExperience.getText().toString()));
+                firmenModel.setWebLink(b.etLink.getText().toString());
+                firmenModel.setServiceCategory(b.autoCompleteTextView.getText().toString());
+                firmenModel.setServiceRadius(Integer.parseInt(b.etServiceRadius.getText().toString()));
+                firmenModel.setContactInfo(b.etContactInfo.getText().toString());
+                firmenModel.setAboutMe(b.etAboutMe.getText().toString());
+                firmenModel.setLegalRepresentation(b.etLegalRepresentation.getText().toString());
                 String imageUrl = selectedImageUri.toString();
-                executorModel.setImageUrl(imageUrl);
+                firmenModel.setImageUrl(imageUrl);
 
 
                 Bundle args = new Bundle();
-                args.putParcelable("executorModel", executorModel);
+                args.putParcelable("firmenModel", firmenModel);
 
 
                 //navController.navigate(R.id.action_loginExecutorFragment_to_OTPFragment, args);

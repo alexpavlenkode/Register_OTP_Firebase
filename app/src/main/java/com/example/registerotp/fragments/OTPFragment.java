@@ -23,8 +23,8 @@ import com.example.registerotp.MainActivity;
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentEnterSmsBinding;
 import com.example.registerotp.databinding.FragmentOTPBinding;
-import com.example.registerotp.model.CustomerModel;
-import com.example.registerotp.model.ExecutorModel;
+import com.example.registerotp.model.FirmenModel;
+import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.utils.AndroidUtil;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,8 +52,8 @@ public class OTPFragment extends Fragment {
     private Long timeoutSeconds = 60L;
     private String verificationCode;
     private PhoneAuthProvider.ForceResendingToken resendingToken;
-    private CustomerModel customerModel;
-    private ExecutorModel executorModel;
+    private KundenModell kundenModell;
+    private FirmenModel firmenModel;
     private boolean isCustomer = false;
 
     private Timer timer;
@@ -63,11 +63,11 @@ public class OTPFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
 
-        if (bundle.containsKey("customerModel")) {
-            customerModel = bundle.getParcelable("customerModel");
+        if (bundle.containsKey("kundenModell")) {
+            kundenModell = bundle.getParcelable("kundenModell");
             isCustomer = true;
         } else if (bundle.containsKey("executorModel")) {
-            executorModel = bundle.getParcelable("executorModel");
+            firmenModel = bundle.getParcelable("firmenModel");
         }
 
     }
@@ -87,7 +87,7 @@ public class OTPFragment extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         navController = Navigation.findNavController(view);
 
-        phoneNumber = isCustomer ? customerModel.getPhone() : executorModel.getPhone();
+        phoneNumber = isCustomer ? kundenModell.getPhone() : firmenModel.getPhone();
 
         sendOtp(phoneNumber, false);
 
@@ -119,6 +119,7 @@ public class OTPFragment extends Fragment {
                         .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                                //обрабатывает процесс входа пользователя
                                 signIn(phoneAuthCredential);
                                 setInProgress(false);
                             }
@@ -161,13 +162,18 @@ public class OTPFragment extends Fragment {
     }
 
     void signIn(PhoneAuthCredential phoneAuthCredential) {
-        //login and go to next activity
+        // Устанавливает состояние выполнения в true, чтобы показать, что процесс начался
         setInProgress(true);
+        // Использует FirebaseAuth для входа с учетными данными phoneAuthCredential
         mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
+
             public void onComplete(@NonNull Task<AuthResult> task) {
+                // Устанавливает состояние выполнения в false, чтобы показать, что процесс завершился
                 setInProgress(false);
+                // Проверяет, успешно ли завершена задача
                 if (task.isSuccessful()) {
+                    // Если успешно, вызывает метод setUsername, который, вероятно, устанавливает имя пользователя и переходит к следующей активности
                     setUsername();
                 } else {
                     AndroidUtil.showToast(getActivity(), "OTP verification failed");
@@ -199,10 +205,10 @@ public class OTPFragment extends Fragment {
         setInProgress(true);
 
         if (isCustomer) {
-            customerModel.setUserId(FirebaseUtil.currentUserId());
-            customerModel.setCreatedTimestamp(Timestamp.now());
+            kundenModell.setUserId(FirebaseUtil.currentUserId());
+            kundenModell.setCreatedTimestamp(Timestamp.now());
 
-            FirebaseUtil.currentUserDetails().set(customerModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+            FirebaseUtil.currentUserDetails().set(kundenModell).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     setInProgress(false);
@@ -215,14 +221,14 @@ public class OTPFragment extends Fragment {
             });
         } else {
 
-            executorModel.setUserId(FirebaseUtil.currentUserId());
-            executorModel.setCreatedTimestamp(Timestamp.now());
+            firmenModel.setUserId(FirebaseUtil.currentUserId());
+            firmenModel.setCreatedTimestamp(Timestamp.now());
 
-            Uri selectedImageUri = Uri.parse(executorModel.getImageUrl());
+            Uri selectedImageUri = Uri.parse(firmenModel.getImageUrl());
 
             FirebaseUtil.getCurrentLogoPicStorageRef().putFile(selectedImageUri)
                     .addOnCompleteListener(task -> {
-                        FirebaseUtil.currentCompanyDetails().set(executorModel).addOnCompleteListener(task1 -> {
+                        FirebaseUtil.currentCompanyDetails().set(firmenModel).addOnCompleteListener(task1 -> {
                             setInProgress(false);
                             if (task1.isSuccessful()) {
                                 Intent intent = new Intent(getActivity(), MainActivity.class);

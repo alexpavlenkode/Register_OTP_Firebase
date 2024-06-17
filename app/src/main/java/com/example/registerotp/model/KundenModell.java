@@ -1,5 +1,10 @@
 package com.example.registerotp.model;
-
+/**
+ * Die KundenModell-Klasse repräsentiert die Daten eines Benutzers in der Android-Anwendung.
+ * Sie enthält Informationen wie Telefonnummer, Benutzername, Erstellungszeitstempel,
+ * Benutzer-ID und Passwort. Diese Klasse wurde entwickelt, um die Verwaltung und den Austausch
+ * von Benutzerdaten innerhalb der Anwendung zu erleichtern.
+ */
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,17 +12,17 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.Timestamp;
 
-public class CustomerModel implements Parcelable {
+public class KundenModell implements Parcelable {
     private String phone;
     private String username;
     private Timestamp createdTimestamp;
     private String userId;
     private String password;
 
-    public CustomerModel() {
+    public KundenModell() {
     }
 
-    public CustomerModel(String phone, String username, Timestamp createdTimestamp, String userId, String password) {
+    public KundenModell(String phone, String username, Timestamp createdTimestamp, String userId, String password) {
         this.phone = phone;
         this.username = username;
         this.createdTimestamp = createdTimestamp;
@@ -25,7 +30,7 @@ public class CustomerModel implements Parcelable {
         this.password = password;
     }
 
-    protected CustomerModel(Parcel in) {
+    protected KundenModell(Parcel in) {
         phone = in.readString();
         username = in.readString();
         createdTimestamp = in.readParcelable(Timestamp.class.getClassLoader());
@@ -33,15 +38,15 @@ public class CustomerModel implements Parcelable {
         password = in.readString();
     }
 
-    public static final Creator<CustomerModel> CREATOR = new Creator<CustomerModel>() {
+    public static final Creator<KundenModell> CREATOR = new Creator<KundenModell>() {
         @Override
-        public CustomerModel createFromParcel(Parcel in) {
-            return new CustomerModel(in);
+        public KundenModell createFromParcel(Parcel in) {
+            return new KundenModell(in);
         }
 
         @Override
-        public CustomerModel[] newArray(int size) {
-            return new CustomerModel[size];
+        public KundenModell[] newArray(int size) {
+            return new KundenModell[size];
         }
     };
 

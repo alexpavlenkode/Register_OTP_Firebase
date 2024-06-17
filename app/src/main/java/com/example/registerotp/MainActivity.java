@@ -22,16 +22,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.fragment_start_registration);
 
-//        FirebaseFirestore.getInstance().collection("users")
-//                .get().addOnSuccessListener(result->{
-//                    for (QueryDocumentSnapshot a: result) {
-//                        Log.d("============>", a.getData().toString());
-//                    }
-//                });
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.startRegistration), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

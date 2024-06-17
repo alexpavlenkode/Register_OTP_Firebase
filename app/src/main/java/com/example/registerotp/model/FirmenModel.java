@@ -9,7 +9,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.List;
 
-public class ExecutorModel implements Parcelable {
+public class FirmenModel implements Parcelable {
     private String phone;
     private String companyName;
     private Timestamp createdTimestamp;
@@ -24,7 +24,7 @@ public class ExecutorModel implements Parcelable {
 
     private String imageUrl;
 
-    public ExecutorModel(
+    public FirmenModel(
             String phone,
             String companyName,
             Timestamp createdTimestamp,
@@ -52,10 +52,10 @@ public class ExecutorModel implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public ExecutorModel() {
+    public FirmenModel() {
     }
 
-    protected ExecutorModel(Parcel in) {
+    protected FirmenModel(Parcel in) {
         phone = in.readString();
         companyName = in.readString();
         createdTimestamp = in.readParcelable(Timestamp.class.getClassLoader());
@@ -70,15 +70,15 @@ public class ExecutorModel implements Parcelable {
         imageUrl = in.readString();
     }
 
-    public static final Creator<ExecutorModel> CREATOR = new Creator<ExecutorModel>() {
+    public static final Creator<FirmenModel> CREATOR = new Creator<FirmenModel>() {
         @Override
-        public ExecutorModel createFromParcel(Parcel in) {
-            return new ExecutorModel(in);
+        public FirmenModel createFromParcel(Parcel in) {
+            return new FirmenModel(in);
         }
 
         @Override
-        public ExecutorModel[] newArray(int size) {
-            return new ExecutorModel[size];
+        public FirmenModel[] newArray(int size) {
+            return new FirmenModel[size];
         }
     };
 

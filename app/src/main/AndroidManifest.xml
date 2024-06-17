@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.registerotp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,27 +14,32 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.RegisterOTP"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <activity
+            android:name=".RegActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.RegisterOTP" />
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode= "adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <!-- Definiert die MainActivity -->
         <activity
             android:name=".MainActivity"
-            android:exported="true"/>
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
+
                 <!-- Definiert die SplashActivity, die als Startaktivität der Anwendung dient -->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>

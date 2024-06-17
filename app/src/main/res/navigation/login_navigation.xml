@@ -22,9 +22,6 @@
         tools:layout="@layout/fragment_enter_sms"
         android:name="com.example.registerotp.fragments.SMSFragment"
         android:label="LoginSMSFragment">
-        <action
-            android:id="@+id/id_action_from_sms"
-            />
     </fragment>
 
 </navigation>

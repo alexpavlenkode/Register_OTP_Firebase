@@ -22,4 +22,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Register OTP"
 include(":app")
- 

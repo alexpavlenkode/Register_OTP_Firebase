@@ -15,7 +15,7 @@ import android.view.WindowManager;
 
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentEnterSmsBinding;
-import com.example.registerotp.model.CustomerModel;
+import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.utils.AndroidUtil;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,7 +24,7 @@ public class LoginCustomerFragment extends Fragment {
 
     private FragmentEnterSmsBinding b;
     private NavController navController;
-    private CustomerModel customerModel;
+    private KundenModell kundenModell;
 
 
     @Override
@@ -38,16 +38,18 @@ public class LoginCustomerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //окно не будет изменять свой размер, когда появляется программная клавиатура
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        customerModel = new CustomerModel();
+        kundenModell = new KundenModell();
 
         navController = Navigation.findNavController(view);
         /*b.loginCountrycode.registerCarrierNumberEditText(b.etPhone);
 
         b.btnContinue.setOnClickListener(v -> {
             if (isValid()) {
+                //Получаем Имя, пароль и номер телефона
                 customerModel.setUsername(b.etName.getText().toString());
-                customerModel.setPassword(b.etPassword.getText().toString());
+                customerModel.setPassword(b.etPassword.getTefxt().toString());
                 customerModel.setPhone(b.loginCountrycode.getFullNumberWithPlus());
 
                 Bundle args = new Bundle();

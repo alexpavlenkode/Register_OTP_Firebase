@@ -5,6 +5,7 @@
     <color name="fill_colorF3F3">#F3F3F3</color>
     <color name="primaryTextColor">#11CFC5</color>
     <color name="hintColorText">#5B5B5B</color>
+    <color name="textColor">#5B5B5B</color>
     <color name="btn_back_color">#A2A2A2</color>
     <color name="ntf_text">#404B55</color>
     <color name="ntf_text_shadow">#4D000000</color>
