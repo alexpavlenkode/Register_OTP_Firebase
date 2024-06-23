@@ -142,20 +142,20 @@
                                 android:nextFocusForward="@+id/login_btn"
                                 android:textColor="@color/hintColorText"
                                 android:textSize="16sp" />
-                            </com.google.android.material.textfield.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                            <com.hbb20.CountryCodePicker
-                                android:id="@+id/ccp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:paddingStart="10dp"
-                                app:ccp_autoFormatNumber="true"
-                                app:ccp_countryPreference="de,cz,pl"
-                                app:ccp_defaultPhoneCode="49"
-                                app:ccp_hintExampleNumberType="MOBILE"
-                                app:ccp_showFlag="false"
-                                app:ccp_showNameCode="false" />
+                        <com.hbb20.CountryCodePicker
+                            android:id="@+id/ccp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingStart="10dp"
+                            app:ccp_autoFormatNumber="true"
+                            app:ccp_countryPreference="de,cz,pl"
+                            app:ccp_defaultPhoneCode="49"
+                            app:ccp_hintExampleNumberType="MOBILE"
+                            app:ccp_showFlag="false"
+                            app:ccp_showNameCode="false" />
 
 
                     </FrameLayout>
@@ -168,34 +168,9 @@
                         android:layout_marginTop="21dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/btn_background"
-                        android:text="@string/login_button_text"
+                        android:text="@string/reg_button_text"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/botom_layout"
-                        android:paddingBottom="20dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:text="@string/signup_slash" />
-
-                        <TextView
-                            android:id="@+id/link_to_registr_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="7dp"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/gilroy_medium"
-                            android:text="@string/signup_slash_go_to_registr"
-                            android:textColor="@color/blue_link"
-                            android:textStyle="bold" />
-                    </LinearLayout>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

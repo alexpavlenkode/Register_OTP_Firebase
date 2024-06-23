@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:clipChildren="false"
-    android:clipToPadding="false"
-    tools:context=".SplashActivity">
+    android:clipToPadding="false">
 
     <ImageView
         android:layout_width="158dp"
@@ -29,6 +28,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
         android:src="@drawable/logo_one" />
+
 
     <!--<ProgressBar
         android:layout_width="32dp"

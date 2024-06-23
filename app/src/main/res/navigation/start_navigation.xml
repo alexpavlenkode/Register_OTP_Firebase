@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/start_navigation"
+    app:startDestination="@id/splaschFragment">
+
+    <fragment
+        android:id="@+id/splaschFragment"
+        tools:layout="@layout/fragment_splasch"
+        android:name="com.example.registerotp.fragments.SplaschFragment"
+        android:label="SplaschFragment">
+        <action
+            android:id="@+id/id_action_registration_or_login_from_splasch"
+            app:destination="@id/firstLoginFragment"/>
+        <action
+            android:id="@+id/id_action_to_home_page_from_splasch"
+            app:destination="@id/home_page"/>
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/firstLoginFragment"
+        tools:layout="@layout/fragment_anfang"
+        android:name="com.example.registerotp.fragments.AnfangFragment"
+        android:label="AnfangFragment">
+        <action
+            android:id="@+id/id_action_to_einlogen"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/id_action_to_regestrierung"
+            app:destination="@id/registrierenPhoneFragment" />
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        tools:layout="@layout/fragment_login"
+        android:name="com.example.registerotp.fragments.LoginFragment"
+        android:label="LoginFragment" >
+        <!-- Клик по кнопке, переход на подтверждение по СМС -->
+        <action
+            android:id="@+id/id_action_to_smsActivationFragment"
+            app:destination="@id/smsActivationFragment" />
+        <action
+            android:id="@+id/id_action_to_regestrierung"
+            app:destination="@id/registrierenPhoneFragment" />
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/smsActivationFragment"
+        tools:layout="@layout/fragment_enter_sms"
+        android:name="com.example.registerotp.fragments.SMSFragment"
+        android:label="LoginSMSFragment">
+        <action
+            android:id="@+id/id_action_to_mein_menu"
+            app:destination="@id/home_page" />
+        <action
+            android:id="@+id/id_action_start_reg_after_sms"
+            app:destination="@id/startRegistration" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/home_page"
+        tools:layout="@layout/fragment_homepage"
+        android:name="com.example.registerotp.fragments.HomePageFragment"
+        android:label="HomeKundeFragment">
+
+    </fragment>
+    <!-- Регистрация как??? Ещё подумать... -->
+
+    <fragment
+        android:id="@+id/registrierenPhoneFragment"
+        tools:layout="@layout/fragment_registrieren_phone"
+        android:name="com.example.registerotp.fragments.Fragment_registrieren_phone"
+        android:label="registrierenPhoneFragment" >
+        <action
+            android:id="@+id/id_action_to_sms_befor_regestrierung"
+            app:destination="@id/smsActivationFragment" />
+        <!-- Клик по кнопке, переход на подтверждение по СМС -->
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/startRegistration"
+        tools:layout="@layout/fragment_start_registration"
+        android:name="com.example.registerotp.fragments.RegFragment"
+        android:label="RegistrationKunde">
+        <action
+            android:id="@+id/id_action_to_mein_menu"
+            app:destination="@id/home_page" />
+        <action
+            android:id="@+id/id_action_to_regestrierung_firma"
+            app:destination="@id/startRegistrationFirma" />
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+    <fragment
+        android:id="@+id/startRegistrationFirma"
+        tools:layout="@layout/fragment_start_registration_firma"
+        android:name="com.example.registerotp.fragments.Fragment_start_registration_firma"
+        android:label="RegistrationFirma">
+        <action
+            android:id="@+id/id_action_to_mein_menu"
+            app:destination="@id/home_page" />
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+</navigation>

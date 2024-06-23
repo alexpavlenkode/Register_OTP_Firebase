@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,11 +26,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.Arrays;
 import java.util.List;
-
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 
 public class LoginExecutorFragment extends Fragment {
     private FragmentLoginExecutorBinding b;
@@ -153,7 +147,7 @@ public class LoginExecutorFragment extends Fragment {
                 .get().addOnSuccessListener(result -> {
                     for (QueryDocumentSnapshot a : result) {
                         List<String> professions = (List<String>) a.getData().get("categories");
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.drop_down_item, professions);
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), R.layout.fragment_homepage, professions);
                         b.autoCompleteTextView.setAdapter(arrayAdapter);
                     }
                 });

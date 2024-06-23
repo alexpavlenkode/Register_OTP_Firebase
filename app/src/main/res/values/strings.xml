@@ -6,11 +6,20 @@
     <string name="privatperson">Privat</string>
     <string name="gewerbe">Gewerblich</string>
     <string name="emailEingabe">Dein E-Mail und Passwort</string>
-    <string name="email">E-Mail</string>
+    <string name="email">E-Mail-Adresse:</string>
+    <string name="firmenMail">E-Mail-Adresse:</string>
+    <string name="kontaktDaten">Kontaktdaten</string>
+    <string name="bedingungenDatenschutz">Indem du dich registrierst, akzeptierst du unsere Nutzungsbedingungen und Datenschutzrichtlinien.</string>
+    <string name="erlaubeKontakt">Mit meiner Registrierung erlaube ich es Worker, mich per E-Mail, SMS oder Telefon zu kontaktieren (z. B. für Newsletter oder Umfragen). Diese Einwilligung kann ich jederzeit in den Einstellungen widerrufen.</string>
+
+
     <string name="profilName">Profilname</string>
     <string name="firmenName">Firmenname</string>
-    <string name="login_telefon_hint">Telefon</string>
+    <string name="firmenVorNachname">Vor- und Nachname</string>
+
+    <string name="login_telefon_hint">Telefonnummer:</string>
     <string name="password">Passwort</string>
+    <string name="passwordSecond">Passwort bestätigen</string>
     <!--Buttons-->
     <string name="login_button_text">Einlogen</string>
     <string name="reg_button_text">Regestrieren</string>
@@ -18,8 +27,22 @@
 
     <string name="signup_slash">Neu hier?</string>
     <string name="signup_slash_go_to_registr">Registrieren!</string>
+
+    <!--Fehler-->
     <string name="invalid_name">Hoppla! Hier sollte ein Name stehen.</string>
     <string name="invalid_telefon">Ups! Falsche Nummer. Noch einmal, bitte.</string>
+    <string name="invalid_login_name">Ungültiger Login-Name</string>
+    <string name="invalid_phone_not_exit">Eingegebene Telefonnummer nicht regestriert</string>
+    <string name="invalid_phone_ready_registr">Eingegebene Telefonnummer wurde bereits regestriert</string>
+
+    <string name="invalid_firmen_name">Ungültiger Firmen-Name</string>
+    <string name="invalid_email_name">Ungültiger E-Mail Adresse</string>
+    <string name="invalid_passwort_strong">Das Passwort ist zu einfach.</string>
+    <string name="invalid_passwort">Passwort fehlt</string>
+    <string name="invalid_passwort_second">Passwortwiederholung fehlt</string>
+    <string name="invalid_passwort_ident_check">Passwörter sind unterschiedlich</string>
+
+
     <string name="back_button">Zurück</string>
     <string name="notification_message"><b>Noch ein Moment Geduld!</b>\nDer Code trifft in 30 Sekunden auf Ihrem Handy ein</string>
     <string name="notification_no_sms">Kein Code erhalten?</string>

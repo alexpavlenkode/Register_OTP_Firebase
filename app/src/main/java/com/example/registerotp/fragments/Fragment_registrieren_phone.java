@@ -1,16 +1,7 @@
 package com.example.registerotp.fragments;
 
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,8 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.EditText;
+
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentLoginBinding;
+import com.example.registerotp.databinding.FragmentRegistrierenPhoneBinding;
 import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.utils.AndroidUtil;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,24 +29,21 @@ import com.hbb20.CountryCodePicker;
 
 import java.util.Locale;
 
-public class LoginFragment extends Fragment {
-
+public class Fragment_registrieren_phone extends Fragment {
     private NavController navController;
-    private FragmentLoginBinding binding;
+    private FragmentRegistrierenPhoneBinding binding;
     private NestedScrollView nestedScrollView;
-    private LoginFragment loginFragment;
+    private Fragment_registrieren_phone fragmentRegistrierenPhone;
     private CountryCodePicker ccp;
     private EditText editTextCarrierNumber;
     private KundenModell kundenModell;
 
-
-    //Этот метод вызывается системой Android, когда фрагмент должен создать свой пользовательский интерфейс
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         //Раздуваем макет
-        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        binding = FragmentRegistrierenPhoneBinding.inflate(inflater, container, false);
         //возвращает корневое представление этого макета, чтобы система Android могла отобразить его
 
         return binding.getRoot();
@@ -66,8 +62,8 @@ public class LoginFragment extends Fragment {
             binding.txtUsername.setHint(null);
         });
 
-        loginFragment = this;
-        Locale primaryLocale = loginFragment.getResources().getConfiguration().getLocales().get(0);
+        fragmentRegistrierenPhone = this;
+        Locale primaryLocale = fragmentRegistrierenPhone.getResources().getConfiguration().getLocales().get(0);
         String country = primaryLocale.getCountry();
 
 
@@ -92,14 +88,15 @@ public class LoginFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 // Проверяем, есть ли документы в результате запроса
                                 if (!task.getResult().isEmpty()) {
-                                    // Пользователь с таким номером телефона найден, можно начать процесс верификации по SMS
-                                    Bundle args = new Bundle();
-                                    args.putParcelable("kundenModell", kundenModell);
-                                    navController.navigate(R.id.id_action_to_smsActivationFragment,args);
+                                    // Пользователь с таким номером телефона найден регистрация не возможна!
+                                    AndroidUtil.showToast(getActivity(), getString(R.string.invalid_phone_ready_registr));
                                 } else {
                                     // Пользователь с таким номером телефона не найден, перенаправляем на регистрацию
+                                    Bundle args = new Bundle();
+                                    args.putBoolean("newUser", true);
+                                    args.putParcelable("kundenModell", kundenModell);
+                                    navController.navigate(R.id.id_action_to_sms_befor_regestrierung,args);
 
-                                    AndroidUtil.showToast(getActivity(), getString(R.string.invalid_phone_not_exit));
                                 }
                             } else {
                                 // Ошибка при выполнении запроса
@@ -109,11 +106,6 @@ public class LoginFragment extends Fragment {
 
 
             }
-        });
-        binding.linkToRegistrActivity.setOnClickListener(clickedView  -> {
-            //После нажатия отправляем по destination из Navigation
-            navController.navigate(R.id.id_action_to_regestrierung);
-
         });
 
         // Устанавливаем слушатель изменения WindowInsets для вашего представления
@@ -169,4 +161,5 @@ public class LoginFragment extends Fragment {
         }
         return true;
     }
+
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public class FirmenModel implements Parcelable {
     private String phone;
     private String companyName;
+    private String eMail;
     private Timestamp createdTimestamp;
     private String userId;
     private int experience;
@@ -27,6 +28,7 @@ public class FirmenModel implements Parcelable {
     public FirmenModel(
             String phone,
             String companyName,
+            String eMail,
             Timestamp createdTimestamp,
             String userId,
             int experience,
@@ -40,6 +42,7 @@ public class FirmenModel implements Parcelable {
     ) {
         this.phone = phone;
         this.companyName = companyName;
+        this.eMail = eMail;
         this.createdTimestamp = createdTimestamp;
         this.userId = userId;
         this.experience = experience;
@@ -58,6 +61,7 @@ public class FirmenModel implements Parcelable {
     protected FirmenModel(Parcel in) {
         phone = in.readString();
         companyName = in.readString();
+        eMail = in.readString();
         createdTimestamp = in.readParcelable(Timestamp.class.getClassLoader());
         userId = in.readString();
         experience = in.readInt();
@@ -96,6 +100,14 @@ public class FirmenModel implements Parcelable {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String geteMail() {
+        return eMail;
+    }
+
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
     }
 
     public Timestamp getCreatedTimestamp() {

@@ -170,6 +170,7 @@
                     android:nextFocusDown="@id/inputPhoneNumber"
                     android:textColor="@color/hintColorText"
                     android:textSize="14sp"
+                    android:text="Alex2"
                     app:errorEnabled="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -221,6 +222,7 @@
                     android:nextFocusDown="@id/inputPhoneNumber"
                     android:textColor="@color/hintColorText"
                     android:textSize="14sp"
+                    android:text="alepavlenko@mail.ru"
                     app:errorEnabled="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -231,7 +233,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="63dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="14dp"
                 android:hint="@string/password"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
@@ -259,7 +260,45 @@
                     android:inputType="textPassword"
                     android:nextFocusDown="@id/inputPhoneNumber"
                     android:textColor="@color/hintColorText"
+                    android:text="S4astje."
                     android:textSize="14sp"
+                    app:errorEnabled="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwortSecond"
+                style="@style/AppTheme.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="14dp"
+                android:hint="@string/passwordSecond"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:textColorHint="@color/textColor"
+                app:boxCornerRadiusBottomEnd="15dp"
+                app:boxCornerRadiusBottomStart="15dp"
+                app:boxCornerRadiusTopEnd="15dp"
+                app:boxCornerRadiusTopStart="15dp"
+                app:boxStrokeColor="@color/chat_color_sender"
+                app:errorEnabled="true"
+                app:helperTextTextAppearance="@style/FloatingHintTextAppearance"
+                app:hintTextAppearance="@style/HintTextAppearance">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eingabePasswortSecond"
+                    style="@style/AppTheme.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:imeOptions="actionSend"
+                    android:inputType="textPassword"
+                    android:nextFocusDown="@id/inputPhoneNumber"
+                    android:textColor="@color/hintColorText"
+                    android:textSize="14sp"
+                    android:text="S4astje."
                     app:errorEnabled="true" />
 
             </com.google.android.material.textfield.TextInputLayout>

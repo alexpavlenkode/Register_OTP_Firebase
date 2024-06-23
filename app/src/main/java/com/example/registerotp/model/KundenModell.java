@@ -5,37 +5,49 @@ package com.example.registerotp.model;
  * Benutzer-ID und Passwort. Diese Klasse wurde entwickelt, um die Verwaltung und den Austausch
  * von Benutzerdaten innerhalb der Anwendung zu erleichtern.
  */
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.Timestamp;
 
 public class KundenModell implements Parcelable {
     private String phone;
-    private String username;
+    private String user;
+    private String loginname;
     private Timestamp createdTimestamp;
     private String userId;
     private String password;
+    private String email;
+    private boolean regComplet;
 
     public KundenModell() {
     }
 
-    public KundenModell(String phone, String username, Timestamp createdTimestamp, String userId, String password) {
+    public KundenModell(String phone, String user, String loginname, String email, Timestamp createdTimestamp, String userId, boolean regComplet) {
         this.phone = phone;
-        this.username = username;
+        this.user = user;
+        this.loginname = loginname;
+        this.email = email;
         this.createdTimestamp = createdTimestamp;
         this.userId = userId;
-        this.password = password;
+        this.regComplet = regComplet;
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     protected KundenModell(Parcel in) {
         phone = in.readString();
-        username = in.readString();
+        user = in.readString();
+        loginname = in.readString();
+        email = in.readString();
         createdTimestamp = in.readParcelable(Timestamp.class.getClassLoader());
         userId = in.readString();
-        password = in.readString();
+        regComplet = in.readBoolean();
     }
 
     public static final Creator<KundenModell> CREATOR = new Creator<KundenModell>() {
@@ -59,11 +71,17 @@ public class KundenModell implements Parcelable {
     }
 
     public String getUsername() {
-        return username;
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String user) {
+        this.user = user;
+    }
+    public String getLoginName() {
+        return loginname;
+    }
+    public void setLoginName(String loginname) {
+        this.loginname = loginname;
     }
 
     public Timestamp getCreatedTimestamp() {
@@ -82,12 +100,20 @@ public class KundenModell implements Parcelable {
         this.userId = userId;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String password) {
+        this.email = email;
+    }
+
+    public boolean getRegComplet() {
+        return regComplet;
+    }
+
+    public void setRegComplet(boolean regComplet) {
+        this.regComplet = regComplet;
     }
 
     @Override
@@ -98,9 +124,13 @@ public class KundenModell implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(phone);
-        dest.writeString(username);
+        dest.writeString(user);
+        dest.writeString(loginname);
+        dest.writeString(email);
         dest.writeParcelable(createdTimestamp, flags);
         dest.writeString(userId);
-        dest.writeString(password);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            dest.writeBoolean(regComplet);
+        }
     }
 }

@@ -10,18 +10,13 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-import com.example.registerotp.LoginActivity;
 import com.example.registerotp.MainActivity;
 import com.example.registerotp.R;
-import com.example.registerotp.databinding.FragmentEnterSmsBinding;
 import com.example.registerotp.databinding.FragmentOTPBinding;
 import com.example.registerotp.model.FirmenModel;
 import com.example.registerotp.model.KundenModell;
@@ -36,10 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;

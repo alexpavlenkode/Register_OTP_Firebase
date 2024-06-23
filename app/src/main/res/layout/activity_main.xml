@@ -5,11 +5,11 @@
     android:id="@+id/mainLogin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegActivity">
+    tools:context=".MainActivity">
 
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_reg_fragment"
+        android:id="@+id/startAppFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,6 +18,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/reg_navigation" />
+        app:navGraph="@navigation/start_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

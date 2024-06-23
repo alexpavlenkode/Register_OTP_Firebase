@@ -15,31 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RegisterOTP"
         tools:targetApi="31" >
-        <activity
-            android:name=".RegActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.RegisterOTP" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
         <!-- Definiert die MainActivity -->
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize"
-            android:exported="true" />
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-
                 <!-- Definiert die SplashActivity, die als Startaktivität der Anwendung dient -->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

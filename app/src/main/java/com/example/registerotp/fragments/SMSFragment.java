@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
@@ -21,8 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.registerotp.MainActivity;
-import com.example.registerotp.RegActivity;
+import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentEnterSmsBinding;
 import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.utils.AndroidUtil;
@@ -50,6 +50,7 @@ public class SMSFragment extends Fragment {
     private Long timeOutSeconds = 60L;
     private String verificationCode;
     private PhoneAuthProvider.ForceResendingToken resendingToken;
+    boolean newUser = false;
 
     //Этот метод вызывается системой Android, когда фрагмент должен создать свой пользовательский интерфейс
     @Override
@@ -57,7 +58,7 @@ public class SMSFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         kundenModell = bundle.getParcelable("kundenModell");
-
+        newUser = bundle.getBoolean("newUser");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -259,12 +260,20 @@ public class SMSFragment extends Fragment {
     void dasEinlogen(PhoneAuthCredential phoneAuthCredential) {
         //login and go to next activity
         setzeInBearbeitung(true);
+
         mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 setzeInBearbeitung(false);
                 if (task.isSuccessful()) {
-                    setzeLoginname();
+                    if(newUser){
+                        setzeLoginname();
+                    }else {
+                        Bundle args = new Bundle();
+                        args.putParcelable("kundenModell", kundenModell);
+                        navController.navigate(R.id.id_action_to_mein_menu,args);
+                    }
+
                 } else {
                     AndroidUtil.showToast(getActivity(), "OTP verification failed");
                 }
@@ -322,12 +331,9 @@ public class SMSFragment extends Fragment {
                 setzeInBearbeitung(false);
                 // Проверяет, успешно ли завершена задача
                 if (task.isSuccessful()) {
-                    // Если успешно, создает новый интент для RegActivity
-                    Intent intent = new Intent(getActivity(), RegActivity.class);
-                    // Устанавливает флаги, чтобы очистить все предыдущие активности и создать новую задач
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    // Запускает MainActivit
-                    startActivity(intent);
+                    Bundle args = new Bundle();
+                    args.putParcelable("kundenModell", kundenModell);
+                    navController.navigate(R.id.id_action_start_reg_after_sms,args);
                 }else {
                     // После нужно доделать обработку!!!!----------------------------------------------------- Уход из прилоения, отправка о ошибке
                     Log.e("FirebaseError", "Ошибка при сохранении данных", task.getException());
@@ -336,7 +342,6 @@ public class SMSFragment extends Fragment {
                 }
             }
         });
-
     }
     @Override
     public void onDestroyView() {
