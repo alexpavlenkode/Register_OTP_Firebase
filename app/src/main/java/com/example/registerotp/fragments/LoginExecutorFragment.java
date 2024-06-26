@@ -84,7 +84,7 @@ public class LoginExecutorFragment extends Fragment {
                 firmenModel.setPhone(b.loginCountrycode.getFullNumberWithPlus());
                 firmenModel.setExperience(Integer.parseInt(b.etExperience.getText().toString()));
                 firmenModel.setWebLink(b.etLink.getText().toString());
-                firmenModel.setServiceCategory(b.autoCompleteTextView.getText().toString());
+                //firmenModel.setServiceCategory(b.autoCompleteTextView.getText().toString());
                 firmenModel.setServiceRadius(Integer.parseInt(b.etServiceRadius.getText().toString()));
                 firmenModel.setContactInfo(b.etContactInfo.getText().toString());
                 firmenModel.setAboutMe(b.etAboutMe.getText().toString());

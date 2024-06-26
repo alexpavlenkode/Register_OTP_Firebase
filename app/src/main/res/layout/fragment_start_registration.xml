@@ -130,6 +130,7 @@
                     android:nextFocusDown="@id/inputPhoneNumber"
                     android:textColor="@color/hintColorText"
                     android:textSize="14sp"
+                    android:text="AlexFirma"
                     app:errorEnabled="true" />
 
             </com.google.android.material.textfield.TextInputLayout>

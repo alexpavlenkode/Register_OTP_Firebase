@@ -15,7 +15,7 @@
             app:destination="@id/firstLoginFragment"/>
         <action
             android:id="@+id/id_action_to_home_page_from_splasch"
-            app:destination="@id/home_page"/>
+            app:destination="@id/setDinstleistungen"/>
         <!-- Регистрация как??? Ещё подумать... -->
     </fragment>
 
@@ -101,7 +101,28 @@
         android:name="com.example.registerotp.fragments.Fragment_start_registration_firma"
         android:label="RegistrationFirma">
         <action
-            android:id="@+id/id_action_to_mein_menu"
+            android:id="@+id/id_action_to_set_diensten"
+            app:destination="@id/setDinstleistungen" />
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+    <fragment
+        android:id="@+id/setDinstleistungen"
+        tools:layout="@layout/fragment_set_dienstleistungen"
+        android:name="com.example.registerotp.fragments.fragment_set_dienstleistungen"
+        android:label="DienstleistungenFirma">
+        <action
+            android:id="@+id/id_action_to_set_keywords"
+            app:destination="@id/setKeyWords" />
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/setKeyWords"
+        tools:layout="@layout/fragment_set_keywords"
+        android:name="com.example.registerotp.fragments.fragment_set_keywords"
+        android:label="KeywordsFirma">
+        <action
+            android:id="@+id/id_action_to_set_diensten"
             app:destination="@id/home_page" />
         <!-- Регистрация как??? Ещё подумать... -->
     </fragment>

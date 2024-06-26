@@ -85,9 +85,6 @@ public class RegFragment extends Fragment {
         //Раздуваем макет
         binding = FragmentStartRegistrationBinding.inflate(inflater, container, false);
         mAuth = FirebaseAuth.getInstance();
-
-
-
         return binding.getRoot();
     }
 
@@ -153,6 +150,9 @@ public class RegFragment extends Fragment {
                 firma.setChecked(true); // Устанавливаем выделение для текущего RadioButton
                 binding.firmenName.setVisibility(View.VISIBLE);
                 binding.loginName.setVisibility(View.GONE);
+                binding.eMail.setVisibility(View.GONE);
+                binding.passwort.setVisibility(View.GONE);
+                binding.passwortSecond.setVisibility(View.GONE);
                 binding.regestrierenBtn.setText(getResources().getString(R.string.next_button_text));
             }
         });
@@ -183,60 +183,70 @@ public class RegFragment extends Fragment {
         });
 
         binding.regestrierenBtn.setOnClickListener(clickedView  -> {
-            //После нажатия отправляем по destination из Navigation
-            kundenModell.setEmail(binding.eMail.getEditText().getText().toString());
-            if(isValid()){
                 if(binding.privatperson.isChecked()){
-                    kundenModell.setLoginName(binding.loginName.getEditText().getText().toString());
-                    kundenModell.setRegComplet(true);
+                    if(isValid()){
+                        //После нажатия отправляем по destination из Navigation
+                        String mail = binding.eMail.getEditText().getText().toString();
+                        String password = binding.passwort.getEditText().getText().toString();
 
-                    FirebaseUtil.currentUserDetails().set(kundenModell).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                String mail = binding.eMail.getEditText().getText().toString();
-                                String password = binding.passwort.getEditText().getText().toString();
+                        kundenModell.setEmail(mail);
+                        kundenModell.setLoginName(binding.loginName.getEditText().getText().toString());
+                        kundenModell.setRegComplet(true);
 
-                                mAuth.createUserWithEmailAndPassword(mail, password)
-                                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if (task.isSuccessful()) {
-                                                    // Sign in success, update UI with the signed-in user's information
-                                                    Bundle args = new Bundle();
-                                                    args.putParcelable("kundenModell", kundenModell);
-                                                    navController.navigate(R.id.id_action_to_mein_menu, args);
-                                                } else {
-                                                    try {
-                                                        throw task.getException();
-                                                    } catch (FirebaseAuthUserCollisionException e) {
-                                                        // Этот email уже используется
-                                                        AndroidUtil.showToast(getActivity(), "Пользователь с таким email уже существует.");
-                                                    } catch (Exception e) {
-                                                        // Общая ошибка
-                                                        AndroidUtil.showToast(getActivity(), "Ошибка регистрации: " + e.getMessage());
+                        FirebaseUtil.currentUserDetails().set(kundenModell).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+
+
+                                    mAuth.createUserWithEmailAndPassword(mail, password)
+                                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        // Sign in success, update UI with the signed-in user's information
+                                                        Bundle args = new Bundle();
+                                                        args.putParcelable("kundenModell", kundenModell);
+                                                        navController.navigate(R.id.id_action_to_mein_menu, args);
+                                                    } else {
+                                                        try {
+                                                            throw task.getException();
+                                                        } catch (FirebaseAuthUserCollisionException e) {
+                                                            // Этот email уже используется
+                                                            AndroidUtil.showToast(getActivity(), "Пользователь с таким email уже существует.");
+                                                        } catch (Exception e) {
+                                                            // Общая ошибка
+                                                            AndroidUtil.showToast(getActivity(), "Ошибка регистрации: " + e.getMessage());
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        });
+                                            });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
                 else if (binding.firma.isChecked()){
-                    firmenmodell.setCompanyName(binding.firmenName.getEditText().toString());
-                    firmenmodell.seteMail(binding.eMail.getEditText().toString());
-                    String selectedImgUrl = bildUrl.toString();
-                    firmenmodell.setImageUrl(selectedImgUrl);
                     if(isValid()){
+                        firmenmodell = new FirmenModel();
+                        String firmenName = binding.firmenName.getEditText().getText().toString();
+                        //String mail = binding.eMail.getEditText().getText().toString();
+                        String phone = kundenModell.getPhone();
+                        firmenmodell.setCompanyName(firmenName);
+                        //firmenmodell.seteMail(mail);
+                        firmenmodell.setPhone(phone);
+                        if(bildUrl != null){
+                            String selectedImgUrl = bildUrl.toString();
+                            firmenmodell.setImageUrl(selectedImgUrl);
+                        }
+                        //Передаётся Имя компании
+                        //Емайл
                         Bundle args = new Bundle();
                         args.putParcelable("firmenModell",firmenmodell);
                         navController.navigate(R.id.id_action_to_regestrierung_firma, args);
                     }
                 }
-
-            }
-        });
+            });
 
     }
     //Появление клавиатуры
@@ -267,17 +277,38 @@ public class RegFragment extends Fragment {
                 AndroidUtil.showToast(getActivity(), getString(R.string.invalid_login_name));
                 return false;
             }
+            //Проверяем емайл
+            if (!isValidEmail(binding.eingabeMail.getText().toString())) {
+                AndroidUtil.showToast(getActivity(), getString(R.string.invalid_email_name));
+                return false;
+            }
+            if (password.isEmpty()) {
+                AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort));
+                return false;
+            }
+            if (!isPasswordStrong(password)) {
+                AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort_strong));
+                return false;
+            }
+            if (confirmPassword.isEmpty()) {
+                AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort_second));
+                return false;
+            }
+            if (!password.equals(confirmPassword)) {
+                binding.passwort.setError("");
+                binding.passwortSecond.setError("");
+                AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort_ident_check));
+                // Пароли не совпадают
+                return false;
+            }
         } else if (binding.firma.isChecked()) {
             if(binding.eingabefirmenName.getText().toString().equals("") || binding.eingabefirmenName.getText().toString().length() < 4 ){
                 AndroidUtil.showToast(getActivity(), getString(R.string.invalid_firmen_name));
+                binding.eingabefirmenName.setError("");
                 return false;
             }
         }
-        //Проверяем емайл
-        if (!isValidEmail(binding.eingabeMail.getText().toString())) {
-            AndroidUtil.showToast(getActivity(), getString(R.string.invalid_email_name));
-            return false;
-        }
+
 
         //Проверяем пароль
         //1. Не должно быть пустым
@@ -286,25 +317,7 @@ public class RegFragment extends Fragment {
         // Пароль пустой
 
 
-        if (password.isEmpty()) {
-            AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort));
-            return false;
-        }
-        if (!isPasswordStrong(password)) {
-            AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort_strong));
-            return false;
-        }
-        if (confirmPassword.isEmpty()) {
-            AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort_second));
-            return false;
-        }
-        if (!password.equals(confirmPassword)) {
-            binding.passwort.setError("");
-            binding.passwortSecond.setError("");
-            AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort_ident_check));
-            // Пароли не совпадают
-            return false;
-        }
+
         return true;
     }
 

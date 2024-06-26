@@ -1,13 +1,19 @@
 package com.example.registerotp.model;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FirmenModel implements Parcelable {
     private String phone;
@@ -17,13 +23,16 @@ public class FirmenModel implements Parcelable {
     private String userId;
     private int experience;
     private String webLink;
-    private String serviceCategory;
+    private Set<String> professions = new HashSet<>();
+
+    private Set<String> keywordsProfession = new HashSet<>();
     private int serviceRadius;
     private String contactInfo;
     private String aboutMe;
     private String legalRepresentation;
-
     private String imageUrl;
+    private boolean contacktEnable;
+    private boolean regComplet;
 
     public FirmenModel(
             String phone,
@@ -33,12 +42,15 @@ public class FirmenModel implements Parcelable {
             String userId,
             int experience,
             String webLink,
-            String serviceCategory,
+            Set<String> professions,
+            Set<String> keywordsProfession,
             String contactInfo,
             String aboutMe,
             String legalRepresentation,
             int serviceRadius,
-            String imageUrl
+            String imageUrl,
+            boolean contacktEnable,
+            boolean regComplet
     ) {
         this.phone = phone;
         this.companyName = companyName;
@@ -47,17 +59,21 @@ public class FirmenModel implements Parcelable {
         this.userId = userId;
         this.experience = experience;
         this.webLink = webLink;
-        this.serviceCategory = serviceCategory;
+        this.professions = professions;
+        this.keywordsProfession = keywordsProfession;
         this.contactInfo = contactInfo;
         this.aboutMe = aboutMe;
         this.legalRepresentation = legalRepresentation;
         this.serviceRadius = serviceRadius;
         this.imageUrl = imageUrl;
+        this.contacktEnable = contacktEnable;
+        this.regComplet = regComplet;
     }
 
     public FirmenModel() {
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     protected FirmenModel(Parcel in) {
         phone = in.readString();
         companyName = in.readString();
@@ -66,18 +82,25 @@ public class FirmenModel implements Parcelable {
         userId = in.readString();
         experience = in.readInt();
         webLink = in.readString();
-        serviceCategory = in.readString();
+        professions = Collections.singleton(in.readString());
+        keywordsProfession = Collections.singleton(in.readString());
         serviceRadius = in.readInt();
         contactInfo = in.readString();
         aboutMe = in.readString();
         legalRepresentation = in.readString();
         imageUrl = in.readString();
+        contacktEnable = in.readBoolean();
+        regComplet = in.readBoolean();
+
     }
 
     public static final Creator<FirmenModel> CREATOR = new Creator<FirmenModel>() {
         @Override
         public FirmenModel createFromParcel(Parcel in) {
-            return new FirmenModel(in);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                return new FirmenModel(in);
+            }
+            return null;
         }
 
         @Override
@@ -141,13 +164,19 @@ public class FirmenModel implements Parcelable {
     public void setWebLink(String webLink) {
         this.webLink = webLink;
     }
-
-    public String getServiceCategory() {
-        return serviceCategory;
+    //Professions
+    public Set<String> getProfessions() {
+        return professions;
     }
-
-    public void setServiceCategory(String serviceCategory) {
-        this.serviceCategory = serviceCategory;
+    public void setProfession(Set<String> professions) {
+        this.professions = professions;
+    }
+    //Professions-Keywords
+    public Set<String> getKeywordsProfession() {
+        return keywordsProfession;
+    }
+    public void setKeywordsProfession(Set<String> keywordsProfession) {
+        this.keywordsProfession = keywordsProfession;
     }
 
     public String getContactInfo() {
@@ -190,6 +219,18 @@ public class FirmenModel implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
+    public boolean getcontacktEnable(){return contacktEnable;}
+    public void setcontacktEnable(boolean contacktEnable){this.contacktEnable = contacktEnable;}
+
+    public boolean getRegComplet() {
+        return regComplet;
+    }
+
+    public void setRegComplet(boolean regComplet) {
+        this.regComplet = regComplet;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -203,11 +244,15 @@ public class FirmenModel implements Parcelable {
         dest.writeString(userId);
         dest.writeInt(experience);
         dest.writeString(webLink);
-        dest.writeString(serviceCategory);
+        dest.writeList((List) professions);
         dest.writeInt(serviceRadius);
         dest.writeString(contactInfo);
         dest.writeString(aboutMe);
         dest.writeString(legalRepresentation);
         dest.writeString(imageUrl);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            dest.writeBoolean(contacktEnable);
+            dest.writeBoolean(regComplet);
+        }
     }
 }
