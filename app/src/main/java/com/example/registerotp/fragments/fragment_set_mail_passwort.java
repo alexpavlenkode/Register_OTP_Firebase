@@ -28,6 +28,7 @@ import com.example.registerotp.databinding.FragmentSetKeywordsBinding;
 import com.example.registerotp.databinding.FragmentSetMailPasswortBinding;
 import com.example.registerotp.databinding.FragmentStartRegistrationFirmaBinding;
 import com.example.registerotp.model.FirmenModel;
+import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.utils.AndroidUtil;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -38,6 +39,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class fragment_set_mail_passwort extends Fragment {
@@ -146,7 +148,26 @@ public class fragment_set_mail_passwort extends Fragment {
                 firmenmodell.seteMail(mail);
                 firmenmodell.setRegComplet(true);
 
-                FirebaseUtil.currentUserDetails().set(firmenmodell).addOnCompleteListener(new OnCompleteListener<Void>() {
+                mAuth.createUserWithEmailAndPassword(mail, password)
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    if (user != null) {
+                                        String userId = user.getUid();
+                                        firmenmodell.setRegComplet(true);
+                                        // Создание документа пользователя в Firestore
+                                        createUserDocument(userId,"firma", firmenmodell);
+                                    }
+                                }else {
+                                    // Обработка ошибок
+                                    System.err.println("Error registering user: " + task.getException());
+                                }
+                            }
+                        });
+
+                /*FirebaseUtil.currentUserDetails().set(firmenmodell).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
@@ -187,13 +208,31 @@ public class fragment_set_mail_passwort extends Fragment {
                                     });
                         }
                     }
-                });
+                });*/
 
             }
 
         });
 
 
+    }
+
+    private void createUserDocument(String userId, String modell, FirmenModel firmenmodell){
+        db.collection(modell).document(userId)
+                .set(firmenmodell)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Bundle args = new Bundle();
+                            args.putParcelable("firmenmodell", firmenmodell);
+                            navController.navigate(R.id.finisch_registration_for_firma, args);
+
+                        } else {
+                            System.err.println("Error creating user document: " + task.getException());
+                        }
+                    }
+                });
     }
 
     private boolean isValid(){
