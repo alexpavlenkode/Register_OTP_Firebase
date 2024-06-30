@@ -53,15 +53,15 @@ public class fragment_set_dienstleistungen extends Fragment {
     private FlexboxLayout chipGroupKeywords;
     private FlexboxLayout selectedProfessionsChipGroup;
     private List<String> professionsList = new ArrayList<>();
-    private Set<String> selectedProfessionsSet = new HashSet<>();
+    private List<String> selectedProfessionsSet = new ArrayList<>();
     private FirmenModel firmenmodell;
     private NavController navController;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firmenmodell = new FirmenModel();
-        //Bundle bundle = getArguments();
-        //firmenmodell = bundle.getParcelable("firmenModell");
+        Bundle bundle = getArguments();
+        firmenmodell = bundle.getParcelable("firmenModell");
     }
 
     @Override

@@ -93,7 +93,6 @@ public class Fragment_registrieren_phone extends Fragment {
                                 } else {
                                     // Пользователь с таким номером телефона не найден, перенаправляем на регистрацию
                                     Bundle args = new Bundle();
-                                    args.putBoolean("newUser", true);
                                     args.putParcelable("kundenModell", kundenModell);
                                     navController.navigate(R.id.id_action_to_sms_befor_regestrierung,args);
 

@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentSplaschBinding;
 import com.example.registerotp.utils.FirebaseUtil;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -81,9 +83,6 @@ public class SplaschFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
-
         navController = Navigation.findNavController(view);
         ImageView sichtLogoText = binding.splaschTextLogo;
         sichtLogoText.setAlpha(0f);
@@ -94,34 +93,12 @@ public class SplaschFragment extends Fragment {
             public void onAnimationEnd(Animator animation) {
                 // Handler
                 new Handler().postDelayed(() -> {
-                    //Prüft, ob der Benutzer eingeloggt ist
-                    //1. wenn die SMS noch nicht bestätigt wurde
-                    //2. Wenn SMS bestätigt aber noch nicht registriert
-                    //3. Wenn regestrierung erfolgt wurde
                     FirebaseUtil.logout();
                     if (FirebaseUtil.isLoggedIn()) {
+                        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         navController.navigate(R.id.id_action_to_home_page_from_splasch);
-                        //startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                        /**FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                         checkUserData(user).addOnCompleteListener(task -> {
-                         if (task.isSuccessful()) {
-                         boolean isDataComplete = task.getResult();
-                         if (isDataComplete) {
-                         //Пользователь прошёл регисрацию полностью
-                         Log.w(StateSet.TAG, "UserRegistrationComplite: True", task.getException());
-                         startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                         } else {
-                         Log.w(StateSet.TAG, "UserRegistrationComplite: False", task.getException());
-                         }
-                         } else {
-                         // Handle error
-                         }
-                         });**/
-                        //startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-                        // Wenn der Benutzer nicht eingeloggt ist, startet die LoginActivity
                     } else {
-                        //weiterFirma();
-                        navController.navigate(R.id.id_action_to_home_page_from_splasch);
+                        navController.navigate(R.id.id_action_registration_or_login_from_splasch);
                     }
                 }, 10);
             }

@@ -61,6 +61,7 @@ public class RegFragment extends Fragment {
     private KundenModell kundenModell;
     private FirmenModel firmenmodell;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     //Этот метод вызывается системой Android, когда фрагмент должен создать свой пользовательский интерфейс
     @Override
@@ -68,6 +69,7 @@ public class RegFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         kundenModell = bundle.getParcelable("kundenModell");
+
         bildAuswachLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if(result.getResultCode() == Activity.RESULT_OK){
                 Intent data = result.getData();
@@ -85,6 +87,7 @@ public class RegFragment extends Fragment {
         //Раздуваем макет
         binding = FragmentStartRegistrationBinding.inflate(inflater, container, false);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         return binding.getRoot();
     }
 
@@ -94,6 +97,7 @@ public class RegFragment extends Fragment {
 
 
         navController = Navigation.findNavController(view);
+
         passwordTextInputLayout = binding.passwort;
         passwordEditText = binding.eingabePasswort;
         //Устанавливаем выбор роли
@@ -191,23 +195,48 @@ public class RegFragment extends Fragment {
 
                         kundenModell.setEmail(mail);
                         kundenModell.setLoginName(binding.loginName.getEditText().getText().toString());
-                        kundenModell.setRegComplet(true);
 
-                        FirebaseUtil.currentUserDetails().set(kundenModell).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                        mAuth.createUserWithEmailAndPassword(mail, password)
+                                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            // Регистрация успешна, получить UID пользователя
+                                            FirebaseUser user = mAuth.getCurrentUser();
+                                            if (user != null) {
+                                                String userId = user.getUid();
+                                                kundenModell.setRegComplet(true);
+                                                // Создание документа пользователя в Firestore
+                                                createUserDocument(userId,"users", kundenModell);
+                                            }
+                                        } else {
+                                            // Обработка ошибок
+                                            System.err.println("Error registering user: " + task.getException());
+                                        }
+                                    }
+                                });
+
+                        /*FirebaseUtil.currentUserDetails().set(kundenModell).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-
-
                                     mAuth.createUserWithEmailAndPassword(mail, password)
                                             .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                                     if (task.isSuccessful()) {
                                                         // Sign in success, update UI with the signed-in user's information
+                                                        // Регистрация успешна, получить UID пользователя
+                                                        FirebaseUser user = mAuth.getCurrentUser();
+                                                        if (user != null) {
+                                                            String userId = user.getUid();
+                                                            kundenModell.setRegComplet(true);
+                                                            updateUserRegistrationStatus(userId, kundenModell.getRegComplet());
+                                                        }
                                                         Bundle args = new Bundle();
                                                         args.putParcelable("kundenModell", kundenModell);
-                                                        navController.navigate(R.id.id_action_to_mein_menu, args);
+                                                        navController.navigate(R.id.id_regestriert_privat_kunde, args);
                                                     } else {
                                                         try {
                                                             throw task.getException();
@@ -223,7 +252,7 @@ public class RegFragment extends Fragment {
                                             });
                                 }
                             }
-                        });
+                        });*/
                     }
                 }
                 else if (binding.firma.isChecked()){
@@ -248,6 +277,42 @@ public class RegFragment extends Fragment {
                 }
             });
 
+    }
+
+    private void createUserDocument(String userId, String modell, KundenModell kundenModell){
+        db.collection(modell).document(userId)
+                .set(kundenModell)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Bundle args = new Bundle();
+                            args.putParcelable("kundenModell", kundenModell);
+                            navController.navigate(R.id.id_regestriert_privat_kunde, args);
+
+                        } else {
+                            System.err.println("Error creating user document: " + task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void updateUserRegistrationStatus(String userId, boolean regComplet) {
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(userId)
+                .update("regComplet", regComplet)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            System.out.println("User registration status updated successfully.");
+                        } else {
+                            System.err.println("Error updating user registration status: " + task.getException());
+                        }
+                    }
+                });
     }
     //Появление клавиатуры
     private void animatedNestedScrollViewPaddingChange(NestedScrollView nestedScrollView, int padding){

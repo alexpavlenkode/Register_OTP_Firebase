@@ -59,6 +59,7 @@ public class HomePageFragment extends Fragment {
                             regComplet = document.getBoolean("regComplet").toString();
                             userId = document.getString("userId");
                             username = document.getString("username");
+
                             binding.createdTimestamp.setText(createdTimestamp);
                             binding.email.setText(email);
                             binding.loginname.setText(loginName);

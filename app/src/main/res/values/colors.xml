@@ -14,6 +14,8 @@
     <color name="background">#FFFFFF</color>
     <color name="background_chip">#E5F0FF</color>
     <color name="background_chip_selected">#81A7DC</color>
+    <color name="background_chip_keywords">#FFFFFF</color>
+    <color name="background_chip_keywords_selected">#81A7DC</color>
     <color name="my_secondary">#FFE74C</color>
     <color name="no_sms">#2B58F5</color>
 

@@ -56,14 +56,10 @@ public class AnfangFragment extends Fragment {
         });
         binding.linkToRegistrActivity.setOnClickListener(clickedView  -> {
             //После нажатия отправляем по destination из Navigation
-            navController.navigate(R.id.id_action_to_regestrierung);
+            navController.navigate(R.id.id_action_to_regestrierung_sms);
 
         });
-
-
     }
-
-    //Methode zur Animation der Änderung des unteren Paddings
 
 
 }

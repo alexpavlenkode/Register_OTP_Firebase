@@ -67,13 +67,13 @@
                         android:src="@drawable/workers_png" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/txtUsername"
+                        android:id="@+id/eMail"
                         style="@style/AppTheme.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="63dp"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="5dp"
-                        android:hint="@string/login_email_hint"
+                        android:hint="@string/email"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:textColorHint="@color/hintColorText"
@@ -82,23 +82,23 @@
                         app:boxCornerRadiusTopEnd="15dp"
                         app:boxCornerRadiusTopStart="15dp"
                         app:boxStrokeColor="@color/chat_color_sender"
-                        app:endIconDrawable="@drawable/username"
+                        app:endIconDrawable="@drawable/at"
                         app:endIconMode="custom"
                         app:errorEnabled="true"
                         app:helperTextTextAppearance="@style/FloatingHintTextAppearance"
                         app:hintTextAppearance="@style/HintTextAppearance">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/inputUsername"
+                            android:id="@+id/eingabeMail"
                             style="@style/AppTheme.TextInputLayout"
                             android:layout_width="match_parent"
                             android:layout_height="55dp"
                             app:errorEnabled="true"
                             android:focusable="true"
-                            android:text="Alex"
+                            android:text="alepavlenko@mail.ru"
                             android:focusableInTouchMode="true"
                             android:imeOptions="actionNext"
-                            android:inputType="textCapWords"
+                            android:inputType="textEmailAddress"
                             android:nextFocusDown="@id/inputPhoneNumber"
                             android:textColor="@color/hintColorText"
                             android:textSize="16sp" />
@@ -110,11 +110,11 @@
                         android:layout_gravity="center_horizontal">
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/txtUserTelephon"
+                            android:id="@+id/passwort"
                             style="@style/AppTheme.TextInputLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:hint="@string/login_telefon_hint"
+                            android:layout_height="63dp"
+                            android:hint="@string/password"
                             android:textColorHint="@color/hintColorText"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
@@ -126,42 +126,27 @@
                             app:endIconDrawable="@drawable/password"
                             app:endIconMode="custom"
                             app:helperTextTextAppearance="@style/FloatingHintTextAppearance"
-                            app:hintTextAppearance="@style/HintTextAppearance">
+                            app:hintTextAppearance="@style/HintTextAppearance"
+                            app:passwordToggleEnabled="true">
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/inputPhoneNumber"
+                                android:id="@+id/eingabePasswort"
                                 style="@style/AppTheme.TextInputLayout"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:paddingStart="80dp"
+                                android:layout_height="55dp"
                                 android:text="17670188117"
                                 android:focusable="true"
                                 android:focusableInTouchMode="true"
                                 android:imeOptions="actionSend"
-                                android:inputType="phone"
+                                android:inputType="textPassword"
                                 android:nextFocusForward="@+id/login_btn"
                                 android:textColor="@color/hintColorText"
                                 android:textSize="16sp" />
                             </com.google.android.material.textfield.TextInputLayout>
-
-                            <com.hbb20.CountryCodePicker
-                                android:id="@+id/ccp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:paddingStart="10dp"
-                                app:ccp_autoFormatNumber="true"
-                                app:ccp_countryPreference="de,cz,pl"
-                                app:ccp_defaultPhoneCode="49"
-                                app:ccp_hintExampleNumberType="MOBILE"
-                                app:ccp_showFlag="false"
-                                app:ccp_showNameCode="false" />
-
-
                     </FrameLayout>
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/smsActivation_btn"
+                        android:id="@+id/einlogenBtn"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginLeft="10dp"

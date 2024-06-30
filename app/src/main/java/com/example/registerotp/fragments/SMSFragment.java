@@ -50,15 +50,12 @@ public class SMSFragment extends Fragment {
     private Long timeOutSeconds = 60L;
     private String verificationCode;
     private PhoneAuthProvider.ForceResendingToken resendingToken;
-    boolean newUser = false;
-
     //Этот метод вызывается системой Android, когда фрагмент должен создать свой пользовательский интерфейс
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         kundenModell = bundle.getParcelable("kundenModell");
-        newUser = bundle.getBoolean("newUser");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +67,7 @@ public class SMSFragment extends Fragment {
         EditText editText1 = binding.editText1;
         editText1.setText("");
         editText1.requestFocus();
+
         WindowInsetsControllerCompat insetsController = ViewCompat.getWindowInsetsController(editText1);
         if (insetsController != null) {
             insetsController.show(WindowInsetsCompat.Type.ime());
@@ -224,7 +222,8 @@ public class SMSFragment extends Fragment {
                         .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                dasEinlogen(phoneAuthCredential);
+                                AndroidUtil.showToast(getActivity(), "onVerificationCompleted");
+                                //dasEinlogen(phoneAuthCredential);
                                 setzeInBearbeitung(false);
                             }
 
@@ -261,19 +260,16 @@ public class SMSFragment extends Fragment {
         //login and go to next activity
         setzeInBearbeitung(true);
 
-        mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithCredential(phoneAuthCredential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 setzeInBearbeitung(false);
                 if (task.isSuccessful()) {
-                    if(newUser){
-                        setzeLoginname();
-                    }else {
-                        Bundle args = new Bundle();
-                        args.putParcelable("kundenModell", kundenModell);
-                        navController.navigate(R.id.id_action_to_mein_menu,args);
-                    }
-
+                    //setzeLoginname();
+                    Bundle args = new Bundle();
+                    args.putParcelable("kundenModell", kundenModell);
+                    navController.navigate(R.id.id_action_start_reg_after_sms,args);
                 } else {
                     AndroidUtil.showToast(getActivity(), "OTP verification failed");
                 }
@@ -319,7 +315,9 @@ public class SMSFragment extends Fragment {
         // Устанавливает состояние выполнения в true, чтобы показать, что процесс начался
         setzeInBearbeitung(true);
 
-        // Устанавливает уникальный идентификатор пользователя и время создания для модели клиента
+        //1. Проверяем есть ли пользователь с таким номеро
+
+        /*// Устанавливает уникальный идентификатор пользователя и время создания для модели клиента
         kundenModell.setUserId(FirebaseUtil.currentUserId());
         kundenModell.setCreatedTimestamp(Timestamp.now());
 
@@ -341,7 +339,7 @@ public class SMSFragment extends Fragment {
                     new Handler().postDelayed(() -> setzeLoginname(), 5000);
                 }
             }
-        });
+        });*/
     }
     @Override
     public void onDestroyView() {

@@ -23,9 +23,9 @@ public class FirmenModel implements Parcelable {
     private String userId;
     private int experience;
     private String webLink;
-    private Set<String> professions = new HashSet<>();
+    private List<String> professions = new ArrayList<>();
 
-    private Set<String> keywordsProfession = new HashSet<>();
+    private List<String> keywordsProfession = new ArrayList<>();
     private int serviceRadius;
     private String contactInfo;
     private String aboutMe;
@@ -42,8 +42,8 @@ public class FirmenModel implements Parcelable {
             String userId,
             int experience,
             String webLink,
-            Set<String> professions,
-            Set<String> keywordsProfession,
+            List<String> professions,
+            List<String> keywordsProfession,
             String contactInfo,
             String aboutMe,
             String legalRepresentation,
@@ -82,8 +82,8 @@ public class FirmenModel implements Parcelable {
         userId = in.readString();
         experience = in.readInt();
         webLink = in.readString();
-        professions = Collections.singleton(in.readString());
-        keywordsProfession = Collections.singleton(in.readString());
+        professions = Collections.singletonList(in.readString());
+        keywordsProfession = Collections.singletonList(in.readString());
         serviceRadius = in.readInt();
         contactInfo = in.readString();
         aboutMe = in.readString();
@@ -165,17 +165,17 @@ public class FirmenModel implements Parcelable {
         this.webLink = webLink;
     }
     //Professions
-    public Set<String> getProfessions() {
+    public List<String> getProfessions() {
         return professions;
     }
-    public void setProfession(Set<String> professions) {
+    public void setProfession(List<String> professions) {
         this.professions = professions;
     }
     //Professions-Keywords
-    public Set<String> getKeywordsProfession() {
+    public List<String> getKeywordsProfession() {
         return keywordsProfession;
     }
-    public void setKeywordsProfession(Set<String> keywordsProfession) {
+    public void setKeywordsProfession(List<String> keywordsProfession) {
         this.keywordsProfession = keywordsProfession;
     }
 

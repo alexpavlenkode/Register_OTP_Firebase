@@ -1,8 +1,12 @@
 package com.example.registerotp.fragments;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +29,13 @@ import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentLoginBinding;
 import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.utils.AndroidUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
 
@@ -36,9 +47,13 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding binding;
     private NestedScrollView nestedScrollView;
     private LoginFragment loginFragment;
-    private CountryCodePicker ccp;
     private EditText editTextCarrierNumber;
-    private KundenModell kundenModell;
+
+    private TextInputLayout passwordTextInputLayout;
+    private TextInputEditText passwordEditText;
+    private boolean isPasswordVisible = false;
+    private FirebaseAuth mAuth;
+
 
 
     //Этот метод вызывается системой Android, когда фрагмент должен создать свой пользовательский интерфейс
@@ -58,57 +73,83 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+        mAuth = FirebaseAuth.getInstance();
 
+        passwordTextInputLayout = binding.passwort;
+        passwordEditText = binding.eingabePasswort;
         //Instanz der KundenModell-Klasse
-        kundenModell = new KundenModell();
+        //kundenModell = new KundenModell();
 
-        binding.inputUsername.setOnClickListener(clickedView ->{
-            binding.txtUsername.setHint(null);
+        //Скрываем пароль свёздами, показываем при нажатии
+        passwordTextInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectionStart = passwordEditText.getSelectionStart();
+                int selectionEnd = passwordEditText.getSelectionEnd();
+
+                if (isPasswordVisible) {
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    isPasswordVisible = false;
+                } else {
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    isPasswordVisible = true;
+
+                    // Hide password again after a short delay
+                    new Handler().postDelayed(() -> {
+                        passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        isPasswordVisible = false;
+                        passwordEditText.setSelection(selectionStart, selectionEnd);
+                    }, 1000); // 1 second delay
+                }
+
+                // Move the cursor to the end of the input
+                passwordEditText.setSelection(passwordEditText.getText().length());
+            }
         });
 
-        loginFragment = this;
-        Locale primaryLocale = loginFragment.getResources().getConfiguration().getLocales().get(0);
-        String country = primaryLocale.getCountry();
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) ->{
+            nestedScrollView = binding.nestedScrollViewGetSMS;
 
+            boolean imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+            int imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom;
 
-        ccp = (CountryCodePicker) binding.ccp;
-        editTextCarrierNumber = (EditText) binding.inputPhoneNumber;
-        ccp.setCountryForNameCode(country);
-        ccp.registerCarrierNumberEditText(editTextCarrierNumber);
+            if (imeVisible) {
+                //binding.btnAddImage.setVisibility(View.GONE);
+                animateNestedScrollViewPaddingChange(nestedScrollView, imeHeight);
+            } else {
+                //binding.btnAddImage.setVisibility(View.VISIBLE);
+                animateNestedScrollViewPaddingChange(nestedScrollView, 0);
+            }
+            return insets;
+
+        });
 
         //устанавливает слушатель нажатий
-        binding.smsActivationBtn.setOnClickListener(clickedView  -> {
-            //После нажатия отправляем по destination из Navigation
+        binding.einlogenBtn.setOnClickListener(clickedView  -> {
             if(isValid()){
-                kundenModell.setUsername(binding.txtUsername.getEditText().getText().toString());
-                kundenModell.setPhone(binding.ccp.getFullNumberWithPlus());
+                String mail = binding.eMail.getEditText().getText().toString();
+                String password = binding.passwort.getEditText().getText().toString();
+                mAuth.signInWithEmailAndPassword(mail, password)
+                        .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                // Формируем запрос к коллекции "users" для проверки наличия пользователя с данным номером телефона
-                db.collection("users")
-                        .whereEqualTo("phone", binding.ccp.getFullNumberWithPlus())
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // Проверяем, есть ли документы в результате запроса
-                                if (!task.getResult().isEmpty()) {
-                                    // Пользователь с таким номером телефона найден, можно начать процесс верификации по SMS
-                                    Bundle args = new Bundle();
-                                    args.putParcelable("kundenModell", kundenModell);
-                                    navController.navigate(R.id.id_action_to_smsActivationFragment,args);
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "signInWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    navController.navigate(R.id.id_action_to_home_page_login_sucefull);
                                 } else {
-                                    // Пользователь с таким номером телефона не найден, перенаправляем на регистрацию
-
-                                    AndroidUtil.showToast(getActivity(), getString(R.string.invalid_phone_not_exit));
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(getActivity(), "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                    ///Обработать ошибку!!!!
                                 }
-                            } else {
-                                // Ошибка при выполнении запроса
-                                Log.e("TAG", "Error getting documents: ", task.getException());
                             }
                         });
+                    }
 
-
-            }
         });
         binding.linkToRegistrActivity.setOnClickListener(clickedView  -> {
             //После нажатия отправляем по destination из Navigation
@@ -155,18 +196,22 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean isValid(){
-        if(binding.txtUsername.getEditText().getText().toString().equals("")|| binding.txtUsername.getEditText().getText().toString().length() < 4){
-            binding.txtUsername.setError(getString(R.string.invalid_name));
+        String mail = binding.eingabeMail.getText().toString();
+        String password = binding.eingabePasswort.getText().toString();
+
+        if (!isValidEmail(mail)) {
+            binding.eMail.setError("");
+            AndroidUtil.showToast(getActivity(), getString(R.string.invalid_email_name));
             return false;
-        }else{
-            binding.txtUsername.setError(null);
-        }
-        if(!binding.ccp.isValidFullNumber()) {
-            binding.txtUserTelephon.setError(getString(R.string.invalid_telefon));
+            }
+        if (password.isEmpty()) {
+            AndroidUtil.showToast(getActivity(), getString(R.string.invalid_passwort));
             return false;
-        }else{
-            binding.txtUserTelephon.setError(null);
         }
         return true;
+    }
+    public boolean isValidEmail(String email) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        return email != null && email.matches(emailPattern);
     }
 }

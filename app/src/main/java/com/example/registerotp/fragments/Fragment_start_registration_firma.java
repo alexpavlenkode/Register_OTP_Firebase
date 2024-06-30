@@ -62,7 +62,7 @@ public class Fragment_start_registration_firma extends Fragment {
                 firmenmodell.seteMail(mail);
                 Bundle args = new Bundle();
                 args.putParcelable("firmenModell",firmenmodell);
-                navController.navigate(R.id.id_action_to_set_keywords, args);
+                navController.navigate(R.id.id_action_to_set_diensten, args);
             }
         });
 

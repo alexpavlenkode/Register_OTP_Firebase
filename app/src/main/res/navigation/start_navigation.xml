@@ -15,8 +15,8 @@
             app:destination="@id/firstLoginFragment"/>
         <action
             android:id="@+id/id_action_to_home_page_from_splasch"
-            app:destination="@id/setDinstleistungen"/>
-        <!-- Регистрация как??? Ещё подумать... -->
+            app:destination="@id/home_page"/>
+        <!--Регистрация как??? Ещё подумать... -->
     </fragment>
 
     <fragment
@@ -28,7 +28,7 @@
             android:id="@+id/id_action_to_einlogen"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/id_action_to_regestrierung"
+            android:id="@+id/id_action_to_regestrierung_sms"
             app:destination="@id/registrierenPhoneFragment" />
         <!-- Регистрация как??? Ещё подумать... -->
     </fragment>
@@ -40,8 +40,8 @@
         android:label="LoginFragment" >
         <!-- Клик по кнопке, переход на подтверждение по СМС -->
         <action
-            android:id="@+id/id_action_to_smsActivationFragment"
-            app:destination="@id/smsActivationFragment" />
+            android:id="@+id/id_action_to_home_page_login_sucefull"
+            app:destination="@id/home_page" />
         <action
             android:id="@+id/id_action_to_regestrierung"
             app:destination="@id/registrierenPhoneFragment" />
@@ -53,12 +53,11 @@
         tools:layout="@layout/fragment_enter_sms"
         android:name="com.example.registerotp.fragments.SMSFragment"
         android:label="LoginSMSFragment">
-        <action
-            android:id="@+id/id_action_to_mein_menu"
-            app:destination="@id/home_page" />
+
         <action
             android:id="@+id/id_action_start_reg_after_sms"
             app:destination="@id/startRegistration" />
+
     </fragment>
 
     <fragment
@@ -74,7 +73,7 @@
         android:id="@+id/registrierenPhoneFragment"
         tools:layout="@layout/fragment_registrieren_phone"
         android:name="com.example.registerotp.fragments.Fragment_registrieren_phone"
-        android:label="registrierenPhoneFragment" >
+        android:label="Eingabe_Telefonnummer" >
         <action
             android:id="@+id/id_action_to_sms_befor_regestrierung"
             app:destination="@id/smsActivationFragment" />
@@ -88,11 +87,11 @@
         android:name="com.example.registerotp.fragments.RegFragment"
         android:label="RegistrationKunde">
         <action
-            android:id="@+id/id_action_to_mein_menu"
-            app:destination="@id/home_page" />
-        <action
             android:id="@+id/id_action_to_regestrierung_firma"
             app:destination="@id/startRegistrationFirma" />
+        <action
+            android:id="@+id/id_regestriert_privat_kunde"
+            app:destination="@id/home_page" />
         <!-- Регистрация как??? Ещё подумать... -->
     </fragment>
     <fragment
@@ -122,7 +121,17 @@
         android:name="com.example.registerotp.fragments.fragment_set_keywords"
         android:label="KeywordsFirma">
         <action
-            android:id="@+id/id_action_to_set_diensten"
+            android:id="@+id/id_action_to_set_mail_pass"
+            app:destination="@id/setMailAndPasswort" />
+        <!-- Регистрация как??? Ещё подумать... -->
+    </fragment>
+    <fragment
+        android:id="@+id/setMailAndPasswort"
+        tools:layout="@layout/fragment_set_mail_passwort"
+        android:name="com.example.registerotp.fragments.fragment_set_mail_passwort"
+        android:label="MailAndPasswort">
+        <action
+            android:id="@+id/finisch_registration_for_firma"
             app:destination="@id/home_page" />
         <!-- Регистрация как??? Ещё подумать... -->
     </fragment>
