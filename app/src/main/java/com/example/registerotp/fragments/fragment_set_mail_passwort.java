@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +30,16 @@ import com.example.registerotp.databinding.FragmentSetMailPasswortBinding;
 import com.example.registerotp.databinding.FragmentStartRegistrationFirmaBinding;
 import com.example.registerotp.model.FirmenModel;
 import com.example.registerotp.model.KundenModell;
+import com.example.registerotp.model.LoginModell;
 import com.example.registerotp.utils.AndroidUtil;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -46,6 +50,7 @@ public class fragment_set_mail_passwort extends Fragment {
 
     private NavController navController;
     private FirmenModel firmenmodell;
+    private LoginModell loginModell;
     private FragmentSetMailPasswortBinding binding;
     private boolean isPasswordVisible = false;
     private TextInputLayout passwordTextInputLayout;
@@ -143,22 +148,45 @@ public class fragment_set_mail_passwort extends Fragment {
 
         binding.regestrierenBtnFirma.setOnClickListener(v -> {
             if(isValid()){
+
+
                 String mail = binding.eMail.getEditText().getText().toString();
                 String password = binding.passwort.getEditText().getText().toString();
-                firmenmodell.seteMail(mail);
-                firmenmodell.setRegComplet(true);
+                loginModell = new LoginModell();
+
+                firmenmodell.seteMail(mail.toString());
+
+
 
                 mAuth.createUserWithEmailAndPassword(mail, password)
                         .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
+                                    Timestamp currentTimestamp = Timestamp.now();
+                                    loginModell.setCreatedTimestamp(currentTimestamp);
+                                    loginModell.setRegComplet(true);
                                     FirebaseUser user = mAuth.getCurrentUser();
+                                    String userId = user.getUid();
+                                    loginModell.setUserId(userId.toString());
+                                    loginModell.setPrivatPerson(false);
+
                                     if (user != null) {
-                                        String userId = user.getUid();
-                                        firmenmodell.setRegComplet(true);
+
                                         // Создание документа пользователя в Firestore
-                                        createUserDocument(userId,"firma", firmenmodell);
+                                        createUserDocument(userId,"companies", firmenmodell).addOnCompleteListener(task1 -> {
+                                            if (task.isSuccessful()) {
+                                                loginModell.setRegComplet(true);
+                                                createUserDocument(userId,"id", loginModell).addOnCompleteListener(task2 -> {
+                                                    if (task2.isSuccessful()) {
+                                                        Bundle args = new Bundle();
+                                                        args.putParcelable("companies", firmenmodell);
+                                                        args.putParcelable("id", loginModell);
+                                                        navController.navigate(R.id.id_regestriert_privat_kunde, args);
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 }else {
                                     // Обработка ошибок
@@ -167,48 +195,7 @@ public class fragment_set_mail_passwort extends Fragment {
                             }
                         });
 
-                /*FirebaseUtil.currentUserDetails().set(firmenmodell).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
 
-
-                            mAuth.createUserWithEmailAndPassword(mail, password)
-                                    .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                db.collection("firma")
-                                                        .document(mAuth.getCurrentUser().getUid())
-                                                        .set(firmenmodell)
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    // Sign in success, update UI with the signed-in user's information
-                                                                    Bundle args = new Bundle();
-                                                                    args.putParcelable("firmenmodell", firmenmodell);
-                                                                    navController.navigate(R.id.finisch_registration_for_firma, args);
-                                                                }
-                                                            }
-                                                        });
-                                            } else {
-                                                try {
-                                                    throw task.getException();
-                                                } catch (
-                                                        FirebaseAuthUserCollisionException e) {
-                                                    // Этот email уже используется
-                                                    AndroidUtil.showToast(getActivity(), "Пользователь с таким email уже существует.");
-                                                } catch (Exception e) {
-                                                    // Общая ошибка
-                                                    AndroidUtil.showToast(getActivity(), "Ошибка регистрации: " + e.getMessage());
-                                                }
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });*/
 
             }
 
@@ -217,22 +204,24 @@ public class fragment_set_mail_passwort extends Fragment {
 
     }
 
-    private void createUserDocument(String userId, String modell, FirmenModel firmenmodell){
-        db.collection(modell).document(userId)
-                .set(firmenmodell)
+    private <T extends Parcelable> Task<Void> createUserDocument(String userId, String collection, T model){
+        TaskCompletionSource<Void> taskCompletionSource = new TaskCompletionSource<>();
+        db.collection(collection).document(userId)
+                .set(model)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Bundle args = new Bundle();
-                            args.putParcelable("firmenmodell", firmenmodell);
-                            navController.navigate(R.id.finisch_registration_for_firma, args);
+                            taskCompletionSource.setResult(null);
 
                         } else {
+                            taskCompletionSource.setException(task.getException());
                             System.err.println("Error creating user document: " + task.getException());
                         }
                     }
+
                 });
+        return taskCompletionSource.getTask();
     }
 
     private boolean isValid(){

@@ -19,7 +19,6 @@ public class FirmenModel implements Parcelable {
     private String phone;
     private String companyName;
     private String eMail;
-    private Timestamp createdTimestamp;
     private String userId;
     private int experience;
     private String webLink;
@@ -32,13 +31,11 @@ public class FirmenModel implements Parcelable {
     private String legalRepresentation;
     private String imageUrl;
     private boolean contacktEnable;
-    private boolean regComplet;
 
     public FirmenModel(
             String phone,
             String companyName,
             String eMail,
-            Timestamp createdTimestamp,
             String userId,
             int experience,
             String webLink,
@@ -49,13 +46,11 @@ public class FirmenModel implements Parcelable {
             String legalRepresentation,
             int serviceRadius,
             String imageUrl,
-            boolean contacktEnable,
-            boolean regComplet
+            boolean contacktEnable
     ) {
         this.phone = phone;
         this.companyName = companyName;
         this.eMail = eMail;
-        this.createdTimestamp = createdTimestamp;
         this.userId = userId;
         this.experience = experience;
         this.webLink = webLink;
@@ -67,7 +62,6 @@ public class FirmenModel implements Parcelable {
         this.serviceRadius = serviceRadius;
         this.imageUrl = imageUrl;
         this.contacktEnable = contacktEnable;
-        this.regComplet = regComplet;
     }
 
     public FirmenModel() {
@@ -78,7 +72,6 @@ public class FirmenModel implements Parcelable {
         phone = in.readString();
         companyName = in.readString();
         eMail = in.readString();
-        createdTimestamp = in.readParcelable(Timestamp.class.getClassLoader());
         userId = in.readString();
         experience = in.readInt();
         webLink = in.readString();
@@ -90,7 +83,6 @@ public class FirmenModel implements Parcelable {
         legalRepresentation = in.readString();
         imageUrl = in.readString();
         contacktEnable = in.readBoolean();
-        regComplet = in.readBoolean();
 
     }
 
@@ -133,13 +125,6 @@ public class FirmenModel implements Parcelable {
         this.eMail = eMail;
     }
 
-    public Timestamp getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(Timestamp createdTimestamp) {
-        this.createdTimestamp = createdTimestamp;
-    }
 
     public String getUserId() {
         return userId;
@@ -222,13 +207,6 @@ public class FirmenModel implements Parcelable {
     public boolean getcontacktEnable(){return contacktEnable;}
     public void setcontacktEnable(boolean contacktEnable){this.contacktEnable = contacktEnable;}
 
-    public boolean getRegComplet() {
-        return regComplet;
-    }
-
-    public void setRegComplet(boolean regComplet) {
-        this.regComplet = regComplet;
-    }
 
 
     @Override
@@ -240,7 +218,6 @@ public class FirmenModel implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(phone);
         dest.writeString(companyName);
-        dest.writeParcelable(createdTimestamp, flags);
         dest.writeString(userId);
         dest.writeInt(experience);
         dest.writeString(webLink);
@@ -252,7 +229,6 @@ public class FirmenModel implements Parcelable {
         dest.writeString(imageUrl);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dest.writeBoolean(contacktEnable);
-            dest.writeBoolean(regComplet);
         }
     }
 }

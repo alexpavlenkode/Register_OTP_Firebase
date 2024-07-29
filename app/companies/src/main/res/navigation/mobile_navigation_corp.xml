@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation_corp"
+    app:startDestination="@+id/navigation_home_corp">
+
+    <fragment
+        android:id="@+id/navigation_home_corp"
+        android:name="com.example.companies.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_taskDetailFragment"
+            app:destination="@id/taskDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_nachrichten"
+        android:name="com.example.companies.ui.nachrichten.NachrichtenFragment"
+        android:label="@string/title_message"
+        tools:layout="@layout/fragment_nachrichten" />
+
+    <fragment
+        android:id="@+id/navigation_meldungen"
+        android:name="com.example.companies.ui.meldungen.MeldungenFragment"
+        android:label="@string/title_meldungen"
+        tools:layout="@layout/fragment_meldungen" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.companies.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/taskDetailFragment"
+        android:name="com.example.companies.ui.task.TaskDetailFragment"
+        tools:layout="@layout/fragment_task_detail" />
+</navigation>

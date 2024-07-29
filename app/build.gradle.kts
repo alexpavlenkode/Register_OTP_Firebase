@@ -1,5 +1,3 @@
-import com.android.ide.common.repository.main
-
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
@@ -90,6 +88,7 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(project(":app:companies"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

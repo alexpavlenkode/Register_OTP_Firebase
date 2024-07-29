@@ -2,6 +2,8 @@ package com.example.registerotp.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,8 +21,13 @@ import android.widget.ImageView;
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentSplaschBinding;
 import com.example.registerotp.utils.FirebaseUtil;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,6 +39,9 @@ public class SplaschFragment extends Fragment {
     private FragmentSplaschBinding binding;
     private NavController navController;
     private FirestoreHelper firestoreHelper;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
 
 
     @Override
@@ -93,10 +103,40 @@ public class SplaschFragment extends Fragment {
             public void onAnimationEnd(Animator animation) {
                 // Handler
                 new Handler().postDelayed(() -> {
-                    FirebaseUtil.logout();
+                    mAuth = FirebaseAuth.getInstance();
+                    db = FirebaseFirestore.getInstance();
+                    //FirebaseUtil.logout();
                     if (FirebaseUtil.isLoggedIn()) {
-                        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        navController.navigate(R.id.id_action_to_home_page_from_splasch);
+
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        String uid = currentUser.getUid();
+
+                        DocumentReference userRef = db.collection("id").document(uid);
+                        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Boolean isPrivatPerson = document.getBoolean("isPrivatPerson");
+                                        if (isPrivatPerson) {
+                                            //navController.navigate(R.id.id_action_to_home_page_from_splasch);
+                                        }
+                                        else {
+                                            Intent intent = new Intent(getContext(), com.example.companies.CompanyActivity.class);
+                                            //Intent intent = new Intent(getContext(), com.example.users.UserActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    } else {
+                                        // Document does not exist
+                                        System.out.println("No such document!");
+                                    }
+                                } else {
+                                    System.err.println("Error getting documents: " + task.getException());
+                                }
+                            }
+                        });
+
                     } else {
                         navController.navigate(R.id.id_action_registration_or_login_from_splasch);
                     }

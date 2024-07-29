@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentStartRegistrationBinding;
 import com.example.registerotp.model.FirmenModel;
 import com.example.registerotp.model.KundenModell;
+import com.example.registerotp.model.LoginModell;
 import com.example.registerotp.utils.AndroidUtil;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -37,6 +39,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -59,9 +62,11 @@ public class RegFragment extends Fragment {
     private ActivityResultLauncher<Intent> bildAuswachLauncher;
     private Uri bildUrl;
     private KundenModell kundenModell;
+    private LoginModell loginModell;
     private FirmenModel firmenmodell;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private boolean isRegistred = false;
 
     //Этот метод вызывается системой Android, когда фрагмент должен создать свой пользовательский интерфейс
     @Override
@@ -189,13 +194,17 @@ public class RegFragment extends Fragment {
         binding.regestrierenBtn.setOnClickListener(clickedView  -> {
                 if(binding.privatperson.isChecked()){
                     if(isValid()){
+
+
                         //После нажатия отправляем по destination из Navigation
                         String mail = binding.eMail.getEditText().getText().toString();
                         String password = binding.passwort.getEditText().getText().toString();
+                        loginModell = new LoginModell();
 
-                        kundenModell.setEmail(mail);
+                        kundenModell.setEmail(mail.toString());
                         kundenModell.setLoginName(binding.loginName.getEditText().getText().toString());
 
+                        loginModell.setPrivatPerson(true);
 
                         mAuth.createUserWithEmailAndPassword(mail, password)
                                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
@@ -204,11 +213,26 @@ public class RegFragment extends Fragment {
                                         if (task.isSuccessful()) {
                                             // Регистрация успешна, получить UID пользователя
                                             FirebaseUser user = mAuth.getCurrentUser();
+                                            String userId = user.getUid();
+                                            Timestamp currentTimestamp = Timestamp.now();
+                                            kundenModell.setUserId(userId.toString());
+                                            loginModell.setUserId(userId.toString());
                                             if (user != null) {
-                                                String userId = user.getUid();
-                                                kundenModell.setRegComplet(true);
+                                                loginModell.setCreatedTimestamp(currentTimestamp);
                                                 // Создание документа пользователя в Firestore
-                                                createUserDocument(userId,"users", kundenModell);
+                                                createUserDocument(userId,"users", kundenModell).addOnCompleteListener(task1 -> {
+                                                    if (task.isSuccessful()) {
+                                                        loginModell.setRegComplet(true);
+                                                        createUserDocument(userId,"id", loginModell).addOnCompleteListener(task2 -> {
+                                                            if (task2.isSuccessful()) {
+                                                                Bundle args = new Bundle();
+                                                                args.putParcelable("users", kundenModell);
+                                                                args.putParcelable("id", loginModell);
+                                                                navController.navigate(R.id.id_regestriert_privat_kunde, args);
+                                                            }
+                                                        });
+                                                    }
+                                                });
                                             }
                                         } else {
                                             // Обработка ошибок
@@ -216,43 +240,6 @@ public class RegFragment extends Fragment {
                                         }
                                     }
                                 });
-
-                        /*FirebaseUtil.currentUserDetails().set(kundenModell).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    mAuth.createUserWithEmailAndPassword(mail, password)
-                                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                    if (task.isSuccessful()) {
-                                                        // Sign in success, update UI with the signed-in user's information
-                                                        // Регистрация успешна, получить UID пользователя
-                                                        FirebaseUser user = mAuth.getCurrentUser();
-                                                        if (user != null) {
-                                                            String userId = user.getUid();
-                                                            kundenModell.setRegComplet(true);
-                                                            updateUserRegistrationStatus(userId, kundenModell.getRegComplet());
-                                                        }
-                                                        Bundle args = new Bundle();
-                                                        args.putParcelable("kundenModell", kundenModell);
-                                                        navController.navigate(R.id.id_regestriert_privat_kunde, args);
-                                                    } else {
-                                                        try {
-                                                            throw task.getException();
-                                                        } catch (FirebaseAuthUserCollisionException e) {
-                                                            // Этот email уже используется
-                                                            AndroidUtil.showToast(getActivity(), "Пользователь с таким email уже существует.");
-                                                        } catch (Exception e) {
-                                                            // Общая ошибка
-                                                            AndroidUtil.showToast(getActivity(), "Ошибка регистрации: " + e.getMessage());
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                }
-                            }
-                        });*/
                     }
                 }
                 else if (binding.firma.isChecked()){
@@ -279,22 +266,24 @@ public class RegFragment extends Fragment {
 
     }
 
-    private void createUserDocument(String userId, String modell, KundenModell kundenModell){
-        db.collection(modell).document(userId)
-                .set(kundenModell)
+    private <T extends Parcelable> Task<Void> createUserDocument(String userId, String collection, T model){
+        TaskCompletionSource<Void> taskCompletionSource = new TaskCompletionSource<>();
+        db.collection(collection).document(userId)
+                .set(model)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Bundle args = new Bundle();
-                            args.putParcelable("kundenModell", kundenModell);
-                            navController.navigate(R.id.id_regestriert_privat_kunde, args);
+                            taskCompletionSource.setResult(null);
 
                         } else {
+                            taskCompletionSource.setException(task.getException());
                             System.err.println("Error creating user document: " + task.getException());
                         }
                     }
+
                 });
+        return taskCompletionSource.getTask();
     }
 
     private void updateUserRegistrationStatus(String userId, boolean regComplet) {

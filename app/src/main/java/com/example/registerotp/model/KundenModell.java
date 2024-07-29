@@ -18,23 +18,19 @@ public class KundenModell implements Parcelable {
     private String phone;
     private String user;
     private String loginname;
-    private Timestamp createdTimestamp;
     private String userId;
     private String password;
     private String email;
-    private boolean regComplet;
 
     public KundenModell() {
     }
 
-    public KundenModell(String phone, String user, String loginname, String email, Timestamp createdTimestamp, String userId, boolean regComplet) {
+    public KundenModell(String phone, String user, String loginname, String email, String userId) {
+        this.userId = userId;
         this.phone = phone;
         this.user = user;
         this.loginname = loginname;
         this.email = email;
-        this.createdTimestamp = createdTimestamp;
-        this.userId = userId;
-        this.regComplet = regComplet;
     }
 
 
@@ -45,9 +41,8 @@ public class KundenModell implements Parcelable {
         user = in.readString();
         loginname = in.readString();
         email = in.readString();
-        createdTimestamp = in.readParcelable(Timestamp.class.getClassLoader());
         userId = in.readString();
-        regComplet = in.readBoolean();
+        //regComplet = in.readBoolean();
     }
 
     public static final Creator<KundenModell> CREATOR = new Creator<KundenModell>() {
@@ -84,14 +79,6 @@ public class KundenModell implements Parcelable {
         this.loginname = loginname;
     }
 
-    public Timestamp getCreatedTimestamp() {
-        return createdTimestamp;
-    }
-
-    public void setCreatedTimestamp(Timestamp createdTimestamp) {
-        this.createdTimestamp = createdTimestamp;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -107,14 +94,14 @@ public class KundenModell implements Parcelable {
     public void setEmail(String password) {
         this.email = email;
     }
-
+/*
     public boolean getRegComplet() {
         return regComplet;
     }
 
     public void setRegComplet(boolean regComplet) {
         this.regComplet = regComplet;
-    }
+    }*/
 
     @Override
     public int describeContents() {
@@ -127,10 +114,10 @@ public class KundenModell implements Parcelable {
         dest.writeString(user);
         dest.writeString(loginname);
         dest.writeString(email);
-        dest.writeParcelable(createdTimestamp, flags);
+        //dest.writeParcelable(createdTimestamp, flags);
         dest.writeString(userId);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             dest.writeBoolean(regComplet);
-        }
+        }*/
     }
 }

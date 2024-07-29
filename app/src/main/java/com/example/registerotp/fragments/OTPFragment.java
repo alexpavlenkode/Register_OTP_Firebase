@@ -198,7 +198,6 @@ public class OTPFragment extends Fragment {
 
         if (isCustomer) {
             kundenModell.setUserId(FirebaseUtil.currentUserId());
-            kundenModell.setCreatedTimestamp(Timestamp.now());
 
             FirebaseUtil.currentUserDetails().set(kundenModell).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -214,7 +213,6 @@ public class OTPFragment extends Fragment {
         } else {
 
             firmenModel.setUserId(FirebaseUtil.currentUserId());
-            firmenModel.setCreatedTimestamp(Timestamp.now());
 
             Uri selectedImageUri = Uri.parse(firmenModel.getImageUrl());
 

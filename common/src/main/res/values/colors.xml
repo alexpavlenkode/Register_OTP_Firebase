@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="logo_tet_left">#1E1E1E</color>
+    <color name="logo_tet_right">#988D8D</color>
+    <color name="fill_colorF3F3">#F3F3F3</color>
+    <color name="primaryTextColor">#11CFC5</color>
+    <color name="hintColorText">#5B5B5B</color>
+    <color name="textColor">#5B5B5B</color>
+    <color name="btn_back_color">#A2A2A2</color>
+    <color name="ntf_text">#404B55</color>
+    <color name="ntf_text_shadow">#4D000000</color>
+    <color name="urgent_background">#EA6D46</color>
+    <color name="tomorrow_background">#1A000000</color>
+    <color name="permanent_background">#1A2B58F5</color>
+
+
+    <color name="my_primary">#C8461D</color>
+    <color name="background">#FFFFFF</color>
+    <color name="background_app">#F1F1F8</color>
+    <color name="background_chip">#E5F0FF</color>
+    <color name="background_chip_selected">#81A7DC</color>
+    <color name="background_chip_keywords">#FFFFFF</color>
+    <color name="background_chip_keywords_selected">#81A7DC</color>
+    <color name="my_secondary">#FFE74C</color>
+    <color name="no_sms">#2B58F5</color>
+    <color name="description_title">#9D9CB1</color>
+    <color name="link_map">#694FEF</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="off_white">#FAFAFA</color>
+    <color name="light_gray">#C3C3C3</color>
+    <color name="button_not_clicked">#694FEF</color>
+    <color name="blue_link">#1E1E1E</color>
+    <color name="chat_color_sender">#1E88E5</color>
+    <color name="chat_color_receiver">#7CB342</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+</resources>

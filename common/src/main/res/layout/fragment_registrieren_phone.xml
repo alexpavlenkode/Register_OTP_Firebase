@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/login_fragment_login"
+    android:backgroundTint="@color/white">
+
+    <ImageView
+        android:id="@+id/splasch_logo_png"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/nestedScrollViewGetSMS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_one" />
+
+    <!-- NestedScrollView для прокрутки содержимого -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollViewGetSMS"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fillViewport="true">
+
+        <!-- LinearLayout с вертикальной ориентацией для содержимого -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="-30dp"
+                app:cardCornerRadius="40dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="40dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="36dp"
+                        android:layout_height="7dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="15dp"
+                        app:cardBackgroundColor="@color/fill_colorF3F3"
+                        app:cardCornerRadius="20dp" />
+
+                    <ImageView
+                        android:id="@+id/new_image_view"
+                        android:layout_width="140dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/workers_png" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/txtUsername"
+                        style="@style/AppTheme.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="63dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:hint="@string/login_email_hint"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:textColorHint="@color/hintColorText"
+                        app:boxCornerRadiusBottomEnd="15dp"
+                        app:boxCornerRadiusBottomStart="15dp"
+                        app:boxCornerRadiusTopEnd="15dp"
+                        app:boxCornerRadiusTopStart="15dp"
+                        app:boxStrokeColor="@color/chat_color_sender"
+                        app:endIconDrawable="@drawable/username"
+                        app:endIconMode="custom"
+                        app:errorEnabled="true"
+                        app:helperTextTextAppearance="@style/FloatingHintTextAppearance"
+                        app:hintTextAppearance="@style/HintTextAppearance">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputUsername"
+                            style="@style/AppTheme.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            app:errorEnabled="true"
+                            android:focusable="true"
+                            android:text="Alex"
+                            android:focusableInTouchMode="true"
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapWords"
+                            android:nextFocusDown="@id/inputPhoneNumber"
+                            android:textColor="@color/hintColorText"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="63dp"
+                        android:layout_gravity="center_horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/txtUserTelephon"
+                            style="@style/AppTheme.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/login_telefon_hint"
+                            android:textColorHint="@color/hintColorText"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            app:boxCornerRadiusBottomEnd="15dp"
+                            app:boxCornerRadiusBottomStart="15dp"
+                            app:boxCornerRadiusTopEnd="15dp"
+                            app:boxCornerRadiusTopStart="15dp"
+                            app:boxStrokeColor="@color/chat_color_sender"
+                            app:endIconDrawable="@drawable/password"
+                            app:endIconMode="custom"
+                            app:helperTextTextAppearance="@style/FloatingHintTextAppearance"
+                            app:hintTextAppearance="@style/HintTextAppearance">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/inputPhoneNumber"
+                                style="@style/AppTheme.TextInputLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingStart="80dp"
+                                android:text="17670188117"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:imeOptions="actionSend"
+                                android:inputType="phone"
+                                android:nextFocusForward="@+id/login_btn"
+                                android:textColor="@color/hintColorText"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.hbb20.CountryCodePicker
+                            android:id="@+id/ccp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingStart="10dp"
+                            app:ccp_autoFormatNumber="true"
+                            app:ccp_countryPreference="de,cz,pl"
+                            app:ccp_defaultPhoneCode="49"
+                            app:ccp_hintExampleNumberType="MOBILE"
+                            app:ccp_showFlag="false"
+                            app:ccp_showNameCode="false" />
+
+
+                    </FrameLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/smsActivation_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="21dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/btn_background"
+                        android:text="@string/reg_button_text"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

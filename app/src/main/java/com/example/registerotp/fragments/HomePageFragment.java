@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.registerotp.databinding.FragmentHomepageBinding;
+import com.example.registerotp.model.FirmenModel;
 import com.example.registerotp.model.KundenModell;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,16 +27,16 @@ public class HomePageFragment extends Fragment {
     private FragmentHomepageBinding binding;
     private NavController navController;
     private KundenModell kundenModell;
+    private FirmenModel firmenmodell;
     private FirebaseUser user;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private String createdTimestamp,email,loginName,phone,userId,username,regComplet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentHomepageBinding.inflate(inflater, container, false);
-        mAuth = FirebaseAuth.getInstance();
-
         return binding.getRoot();
     }
     @Override
@@ -44,54 +46,56 @@ public class HomePageFragment extends Fragment {
        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            DocumentReference userRef = db.collection("users").document(uid);
-            userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            createdTimestamp = document.getString("createdTimestamp");
-                            email = document.getString("email");
-                            loginName = document.getString("loginName");
-                            phone = document.getString("phone");
-                            regComplet = document.getBoolean("regComplet").toString();
-                            userId = document.getString("userId");
-                            username = document.getString("username");
+            findUserInCollection("users", uid);
+        }
+    }
 
-                            binding.createdTimestamp.setText(createdTimestamp);
-                            binding.email.setText(email);
-                            binding.loginname.setText(loginName);
-                            binding.phone.setText(phone);
-                            binding.regComplet.setText(regComplet);
-                            binding.userId.setText(userId);
-                            binding.username.setText(username);
-
+    private void findUserInCollection(String collection, String uid){
+        DocumentReference userRef = db.collection(collection).document(uid);
+        // Получение документа пользователя
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        if (collection.equals("users")) {
+                            // Маппинг документа на модель KundenModell
+                            KundenModell user = document.toObject(KundenModell.class);
+                            updateUIWithKundenData(user);
+                        } else if (collection.equals("firma")) {
+                            // Маппинг документа на модель FirmenModel
+                            FirmenModel company = document.toObject(FirmenModel.class);
+                            updateUIWithFirmenData(company);
+                        }
+                    }else {
+                        // Если пользователь не найден в текущей коллекции, проверяем другую коллекцию
+                        if (collection.equals("users")) {
+                            findUserInCollection("firma", uid);
+                        } else {
+                            // Обработка случая, когда пользователь не найден ни в одной из коллекций
+                            Toast.makeText(getActivity(), "User not found in both collections", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
-            });
-        }
-
-
-
-            /*(documentSnapshot.exists()){
-                String createdTimestamp = documentSnapshot.getString("createdTimestamp");
-                String email = documentSnapshot.getString("email");
-                String loginName = documentSnapshot.getString("loginName");
-                String phone = documentSnapshot.getString("phone");
-                //boolean regComplet = documentSnapshot.getBoolean("regComplet");
-                String userId = documentSnapshot.getString("userId");
-                String username = documentSnapshot.getString("username");
-
             }
         });
+    }
 
-        //binding.loginname.setText(loginName);
-        //binding.phone.setText(phone);
-        //binding.userId.setText(userId);
-        //binding.username.setText(username);*/
+    private void updateUIWithKundenData(KundenModell user) {
+        binding.email.setText(user.getEmail() != null ? user.getEmail() : "N/A");
+        binding.loginname.setText(user.getUsername());
+        binding.phone.setText(user.getPhone());
+        binding.userId.setText(user.getUserId() != null ? user.getUserId() : "N/A");
+        binding.username.setText(user.getLoginName());
+    }
+
+    private void updateUIWithFirmenData(FirmenModel company) {
+        binding.companyName.setText(company.getCompanyName());
+        binding.email.setText(company.geteMail() != null ? company.geteMail() : "N/A");
+        binding.userId.setText(company.getUserId()!= null ? company.getUserId() : "N/A");
+        binding.keywordsProfession.setText(company.getKeywordsProfession().toString());
+        // обновление других полей
     }
 
     @Override
