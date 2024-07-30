@@ -12,6 +12,9 @@
     <color name="urgent_background">#EA6D46</color>
     <color name="tomorrow_background">#1A000000</color>
     <color name="permanent_background">#1A2B58F5</color>
+    <color name="messages_all">#000000</color>
+    <color name="messages_inprogress">#E5F0FF</color>
+    <color name="messages_completed">#F3F3F3</color>
 
 
     <color name="my_primary">#C8461D</color>

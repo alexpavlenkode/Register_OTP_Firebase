@@ -4,19 +4,133 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.nachrichten.NachrichtenFragment">
 
-    <TextView
-        android:id="@+id/text_nachrichten"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/name_left_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/gilroy_bold"
+            android:gravity="start"
+            android:text="@string/title_message"
+            android:textColor="@color/black"
+            android:textSize="32sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/back_button_container"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="17sp"
+            android:background="@drawable/rounded_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout">
+
+            <ImageButton
+                android:id="@+id/my_back_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="centerInside"
+                android:src="@drawable/setting_icon" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/suche_firmen_auftrage"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="11dp"
+            android:hint="@string/suche"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColorHint="@color/hintColorText"
+            app:boxBackgroundMode="outline"
+            app:boxBackgroundColor="@color/white"
+            app:boxCornerRadiusBottomEnd="15dp"
+            app:boxCornerRadiusBottomStart="15dp"
+            app:boxCornerRadiusTopEnd="15dp"
+            app:boxCornerRadiusTopStart="15dp"
+            app:boxStrokeColor="@color/chat_color_sender"
+            app:endIconDrawable="@drawable/search"
+            app:endIconMode="custom"
+            app:errorEnabled="true"
+            app:helperTextTextAppearance="@style/FloatingHintTextAppearance"
+            app:hintTextAppearance="@style/HintTextAppearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/eingabe_suche_firmen_auftrage"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:textColor="@color/hintColorText"
+                android:textSize="14sp"
+                app:errorEnabled="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/chipGroupWichtigkeitNachrichten"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:chipSpacingHorizontal="1dp"
+                app:chipSpacingVertical="1dp"
+                app:flexWrap="nowrap"
+                app:justifyContent="flex_start"
+                app:alignItems="center"
+                android:paddingStart="16dp"
+                />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/selectedChipGroupWichtigkeitNachrichten"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:alignItems="center"/>
+
+
+
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_tasks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_recycler_view_background"
+            tools:listitem="@layout/messages_card" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

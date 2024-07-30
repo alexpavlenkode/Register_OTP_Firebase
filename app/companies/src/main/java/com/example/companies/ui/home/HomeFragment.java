@@ -26,6 +26,7 @@ import com.example.companies.ui.task.TaskDetailViewModel;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.chip.Chip;
 import com.example.comon.R;
+import com.google.android.material.chip.ChipDrawable;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +39,6 @@ public class HomeFragment extends Fragment {
     private TaskAdapter taskAdapter;
     private List<Task> taskList;
     private NavController navController;
-    private static final String TAG = "HomeFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,6 +107,15 @@ public class HomeFragment extends Fragment {
         chip.setChipIconResource(iconResId);
         chip.setChipIconVisible(true);  // Ensure the icon is visible
         chip.setChipBackgroundColorResource(iconColor);
+
+        ChipDrawable chipDrawable = (ChipDrawable) chip.getChipDrawable();
+        if (chipDrawable != null) {
+            chipDrawable.setChipCornerRadius(40f); // Устанавливаем радиус закругления в пикселях
+            chipDrawable.setChipStrokeColorResource(android.R.color.transparent); // Убираем обводку
+
+        }
+        chip.setChipDrawable(chipDrawable);
+
         chipGroup.addView(chip);
         // Создаем параметры LayoutParams и задаем отступы
         FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(

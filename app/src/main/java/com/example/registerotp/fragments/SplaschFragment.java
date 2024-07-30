@@ -93,7 +93,10 @@ public class SplaschFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+        Intent intent = new Intent(getContext(), com.example.companies.CompanyActivity.class);
+        //Intent intent = new Intent(getContext(), com.example.users.UserActivity.class);
+        startActivity(intent);
+        /*navController = Navigation.findNavController(view);
         ImageView sichtLogoText = binding.splaschTextLogo;
         sichtLogoText.setAlpha(0f);
 
@@ -142,7 +145,7 @@ public class SplaschFragment extends Fragment {
                     }
                 }, 10);
             }
-        });
+        });*/
 
 
 

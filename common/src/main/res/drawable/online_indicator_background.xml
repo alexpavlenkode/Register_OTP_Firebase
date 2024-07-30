@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/holo_green_light" /> <!-- Цвет фона, например, зеленый -->
+    <corners android:radius="5dp" /> <!-- Радиус углов, можно настроить по вашему усмотрению -->
+    <size android:width="10dp" android:height="10dp" /> <!-- Размер индикатора -->
+</shape>

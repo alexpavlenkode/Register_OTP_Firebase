@@ -26,6 +26,13 @@
     <string name="urgent">Sofort</string>
     <string name="tomorrow">Dringend</string>
     <string name="permanent">Eilig</string>
+
+    <string name="messages_all">Alle Nachrichten</string>
+    <string name="messages_inprogress">In Arbeit</string>
+    <string name="messages_completed">Erledigt</string>
+
+
+
     <string name="task_title">Поменять лампочку</string>
     <string name="beschreibung">BESCHREIBUNG</string>
     <string name="adresse">ADRESSE</string>
