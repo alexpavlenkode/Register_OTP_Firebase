@@ -38,7 +38,7 @@ public class SplaschFragment extends Fragment {
 
     private FragmentSplaschBinding binding;
     private NavController navController;
-    private FirestoreHelper firestoreHelper;
+    private com.example.registerotp.fragments.FirestoreHelper firestoreHelper;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;

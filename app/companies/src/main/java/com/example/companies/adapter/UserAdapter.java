@@ -39,7 +39,7 @@ public class UserAdapter extends  RecyclerView.Adapter<UserAdapter.UserViewHolde
         // Устанавливаем фото пользователя
         Glide.with(context)
                 .load(user.getPhotoUrl())
-                .placeholder(com.example.comon.R.drawable.ic_user_placeholder) // Замените на ваше изображение-заполнитель
+                .placeholder(com.example.common.R.drawable.ic_user_placeholder) // Замените на ваше изображение-заполнитель
                 .into(holder.userPhoto);
 
         // Устанавливаем онлайн статус
@@ -58,9 +58,9 @@ public class UserAdapter extends  RecyclerView.Adapter<UserAdapter.UserViewHolde
 
         // Устанавливаем статус работы
         if (user.getStatus() == User.STATUS_ACTIVE) {
-            holder.statusChip.setText(context.getString(com.example.comon.R.string.messages_completed));
+            holder.statusChip.setText(context.getString(com.example.common.R.string.messages_completed));
         } else {
-            holder.statusChip.setText(context.getString(com.example.comon.R.string.messages_inprogress));
+            holder.statusChip.setText(context.getString(com.example.common.R.string.messages_inprogress));
         }
 
     }

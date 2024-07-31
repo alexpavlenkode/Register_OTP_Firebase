@@ -28,7 +28,7 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:id="@+id/back_button_container"
+                    android:id="@+id/status_task_color"
                     android:layout_width="36dp"
                     android:layout_height="28dp"
                     android:layout_marginEnd="9dp"

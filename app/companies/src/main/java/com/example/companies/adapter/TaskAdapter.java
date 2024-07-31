@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.companies.R;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +24,7 @@ import java.util.Locale;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
     private static final String TAG = "TaskAdapter";
+    private static LatLng userLocation;
     // В начале класса
     private List<Task> taskList;
     private OnItemClickListener onItemClickListener;
@@ -29,9 +34,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         void onItemClick(Task task);
     }
 
-    public TaskAdapter(List<Task> taskList, OnItemClickListener onItemClickListener){
+    public TaskAdapter(List<Task> taskList,LatLng userLocation, OnItemClickListener onItemClickListener){
         this.taskList = taskList;
         this.onItemClickListener = onItemClickListener;
+        this.userLocation = userLocation;
 
     }
     @NonNull
@@ -68,24 +74,32 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             return taskList.size();
         }
     }
+    public void updateTasks(List<Task> newTasks) {
+        this.taskList.clear();
+        this.taskList.addAll(newTasks);
+        notifyDataSetChanged();
+    }
 
     static class TaskViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView icon;
         public TextView title;
         public TextView description;
         public TextView time;
         public TextView distance;
         public TextView views;
+        public ImageView urgency;
+        public FrameLayout frameLayout;
 
         public TaskViewHolder(View view) {
             super(view);
-            icon = view.findViewById(R.id.task_icon);
             title = view.findViewById(R.id.task_title);
             description = view.findViewById(R.id.task_description);
             time = view.findViewById(R.id.task_time);
             distance = view.findViewById(R.id.task_distance);
             views = view.findViewById(R.id.task_views);
+            urgency = view.findViewById(R.id.task_icon);
+            frameLayout = view.findViewById(R.id.status_task_color);
+
         }
         public void bind(final Task task, final OnItemClickListener listener) {
             Log.d(TAG, "bind: Binding task " + task.getTitle());
@@ -95,12 +109,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             }
 
             // Установка данных в элементы
-            icon.setImageResource(task.getImageResId());
+
             title.setText(task.getTitle());
             description.setText(task.getDescription());
-            time.setText(getTimeAgo(task.getDate()));
-            distance.setText(task.getDistance());
+            time.setText(getTimeAgo(task.getTimestamp()));
+
+            if (userLocation != null) {
+                distance.setText(task.getDistanceTo(userLocation,task.getLocation()));
+                Log.e(TAG, "Disstance from me " + userLocation);
+            }else {
+                distance.setText("00");
+            }
+
+
             views.setText(String.valueOf(task.getViews()));
+            if(task.getUrgency() == 1){
+                urgency.setImageResource(com.example.common.R.drawable.hot);
+                frameLayout.setBackgroundResource(com.example.common.R.drawable.rounded_background_task_card_hot);
+            } else if (task.getUrgency() == 2) {
+                urgency.setImageResource(com.example.common.R.drawable.calendar);
+                frameLayout.setBackgroundResource(com.example.common.R.drawable.rounded_background_task_card_calender);
+            }else {
+                urgency.setImageResource(com.example.common.R.drawable.more);
+                frameLayout.setBackgroundResource(com.example.common.R.drawable.rounded_background_task_card_notrap);
+            }
 
             // Обработка клика
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -113,9 +145,39 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             });
         }
 
-        private String getTimeAgo(Date date) {
+        private static double getDistanc(GeoPoint location){
+            if (location == null) {
+                return Double.NaN; // Возвращаем "не число", если местоположение не задано
+            }
+            final int R = 6371;
+
+            double userLat = location.getLatitude();
+            double userLon = location.getLongitude();
+
+            double lat1 = Math.toRadians(location.getLatitude());
+            double lon1 = Math.toRadians(location.getLongitude());
+            double lat2 = Math.toRadians(userLat);
+            double lon2 = Math.toRadians(userLon);
+
+            double latDistance = lat2 - lat1;
+            double lonDistance = lon2 - lon1;
+            double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                    + Math.cos(lat1) * Math.cos(lat2)
+                    * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            return R * c;
+        }
+
+        // Метод для конвертации Timestamp в Date
+        private static Date convertTimestampToDate(Timestamp timestamp) {
+            return timestamp != null ? timestamp.toDate() : null;
+        }
+
+        // Метод для получения времени в формате "X дней назад", "X часов назад" и т.д.
+        public static String getTimeAgo(Timestamp timestamp) {
+            Date date = convertTimestampToDate(timestamp);
             if (date == null) {
-                Log.e(TAG, "getTimeAgo: Date is null");
                 return "Unbekannt"; // "Unknown" or some placeholder
             }
             long time = date.getTime();
@@ -128,13 +190,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             long days = hours / 24;
 
             if (days > 0) {
-                return days + " Tag(e) zurück"; // "X days ago"
+                return "Vor " + days + (days == 1 ? " Tag" : " Tagen"); // "1 day ago" or "X days ago"
             } else if (hours > 0) {
-                return hours + " Stunde(n) zurück"; // "X hours ago"
+                return "Vor " + hours + (hours == 1 ? " Stunde" : " Stunden"); // "1 hour ago" or "X hours ago"
             } else if (minutes > 0) {
-                return minutes + " Minute(n) zurück"; // "X minutes ago"
+                return "Vor " + minutes + (minutes == 1 ? " Minute" : " Minuten"); // "1 minute ago" or "X minutes ago"
             } else {
-                return "Gerade eben"; // "Just now"
+                return "Jetzt"; // "Just now"
             }
         }
 

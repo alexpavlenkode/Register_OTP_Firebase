@@ -11,10 +11,13 @@ public class User {
     private String messageTime;
     private int unreadCount;
     private int status;
+    private String userId;
 
     // Конструкторы, геттеры и сеттеры
 
-    public User(String photoUrl, boolean isOnline, String name, String lastMessage, String messageTime, int unreadCount, int status) {
+
+
+    public User(String photoUrl, boolean isOnline, String name, String lastMessage, String messageTime, int unreadCount, int status, String userId) {
         this.photoUrl = photoUrl;
         this.isOnline = isOnline;
         this.name = name;
@@ -22,6 +25,7 @@ public class User {
         this.messageTime = messageTime;
         this.unreadCount = unreadCount;
         this.status = status;
+        this.userId = userId;
     }
 
     public String getPhotoUrl() { return photoUrl; }
@@ -31,5 +35,11 @@ public class User {
     public String getMessageTime() { return messageTime; }
     public int getUnreadCount() { return unreadCount; }
     public int getStatus() { return status; }
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }
 

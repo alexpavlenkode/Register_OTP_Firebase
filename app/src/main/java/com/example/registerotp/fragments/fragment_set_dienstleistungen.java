@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentAnfangBinding;
 import com.example.registerotp.databinding.FragmentSetDienstleistungenBinding;
-import com.example.registerotp.model.FirmenModel;
+import com.example.common.model.FirmenModel;
 import com.example.registerotp.utils.AndroidUtil;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.chip.Chip;

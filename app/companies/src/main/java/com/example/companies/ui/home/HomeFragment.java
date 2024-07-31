@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,14 +19,17 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.companies.SharedViewModel;
 import com.example.companies.adapter.Task;
 import com.example.companies.adapter.TaskAdapter;
 import com.example.companies.databinding.FragmentHomeBinding;
+import com.example.companies.repository.TaskRepository;
 import com.example.companies.ui.task.TaskDetailFragment;
 import com.example.companies.ui.task.TaskDetailViewModel;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.chip.Chip;
-import com.example.comon.R;
+import com.example.common.R;
 import com.google.android.material.chip.ChipDrawable;
 
 import java.util.ArrayList;
@@ -33,12 +37,17 @@ import java.util.Date;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
+    private static final String TAG = "HomeFragment: ";
 
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
     private List<Task> taskList;
     private NavController navController;
+    private SharedViewModel viewModel;
+    private TaskRepository taskRepository;
+    private List<String> professions;
+    private LatLng userLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,40 +61,69 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        recyclerView = binding.recyclerViewTasks;
+        taskRepository = new TaskRepository();
+        taskAdapter = new TaskAdapter(taskList,userLocation, new TaskAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Task task) {
+                NavController navController = Navigation.findNavController(getActivity(), com.example.companies.R.id.nav_host_fragment_activity_user);
+                navController.navigate(com.example.companies.R.id.taskDetailFragment);
+
+            }
+        });
+        taskList = new ArrayList<>();
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.fetchUserProfile();
+        LatLng placeholderLocation = new LatLng(0.0, 0.0);
+        userLocation = placeholderLocation;
+
+
+        Log.d("HomeFragment", "RecyclerView adapter set");
 
         FlexboxLayout chipGroupWichtigkeit = binding.chipGroupWichtigkeit;
         FlexboxLayout selectedWichtigkeitChipGroup = binding.selectedChipGroupWichtigkeit;
 
-
         // Add chips with text from strings.xml
-        addChipToGroup(chipGroupWichtigkeit, getString(R.string.urgent), R.drawable.hot, R.color.urgent_background);
-        addChipToGroup(chipGroupWichtigkeit, getString(R.string.tomorrow), R.drawable.hot_tomorrow,R.color.tomorrow_background);
-        addChipToGroup(chipGroupWichtigkeit, getString(R.string.permanent), R.drawable.hot_forever,R.color.permanent_background);
-
-        recyclerView = binding.recyclerViewTasks;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        taskList = new ArrayList<>();
-
-        // Add tasks to the list
-        taskList.add(new Task(R.drawable.hot, "Urgent Task", "This is a short description of the task.", 10, new Date(), "44 km"));
-        taskList.add(new Task(R.drawable.hot, "Tomorrow Task", "Another short description of the task.", 5, new Date(), "58 km"));
-        taskList.add(new Task(R.drawable.hot, "Tomorrow Task", "Lorem ipsum dolor sit amet consectetur. Placerat quis ut fames morbi commodo interdum vulputate morbi at. Lorem ipsum dolor sit amet consectetur. Placerat quis ut fames morbi commodo interdum vulputate morb...", 5, new Date(), "58 km"));
-        taskList.add(new Task(R.drawable.hot, "Tomorrow Task", "Another short description of the task.", 5, new Date(), "58 km"));
-        taskList.add(new Task(R.drawable.hot, "Tomorrow Task", "Another short description of the task.", 5, new Date(), "58 km"));
-        taskList.add(new Task(R.drawable.hot, "Tomorrow Task", "Lorem ipsum dolor sit amet consectetur. Placerat quis ut fames morbi commodo interdum vulputate morbi at. Lorem ipsum dolor sit amet consectetur. Placerat quis ut fames morbi commodo interdum vulputate morb...", 5, new Date(), "58 km"));
-
-
+        addChipToGroup(chipGroupWichtigkeit, getString(R.string.urgent), R.drawable.hot, R.color.urgent_background, 1);
+        addChipToGroup(chipGroupWichtigkeit, getString(R.string.tomorrow), R.drawable.hot_tomorrow,R.color.tomorrow_background, 2);
+        addChipToGroup(chipGroupWichtigkeit, getString(R.string.permanent), R.drawable.hot_forever,R.color.permanent_background, 3);
 
         return root;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
+    private void fetchTasksByProfession() {
+        SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.getUserProfile().observe(getViewLifecycleOwner(), profile -> {
+            if (profile != null) {
+                List<String> professions = profile.getProfessions();
+                if (professions != null && !professions.isEmpty()) {
+                    TaskRepository taskRepository = new TaskRepository(); // Инициализация вашего репозитория
+                    taskRepository.getTasksByProfessions(professions, new TaskRepository.OnTasksFetchedListener() {
+                        @Override
+                        public void onTasksFetched(List<Task> tasks) {
+                            // Обновляем список задач
+                            taskList.clear();
+                            taskList.addAll(tasks);
 
-        TaskAdapter taskAdapter = new TaskAdapter(taskList, new TaskAdapter.OnItemClickListener() {
+                            if (taskAdapter != null) {
+                                updateTask(tasks);
+                            } else {
+                                Log.e("HomeFragment", "TaskAdapter is null");
+                            }
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("HomeFragment", "Error fetching tasks: " + e.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void updateTask(List<Task> taskList){
+        TaskAdapter taskAdapter = new TaskAdapter(taskList,userLocation, new TaskAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Task task) {
                 NavController navController = Navigation.findNavController(getActivity(), com.example.companies.R.id.nav_host_fragment_activity_user);
@@ -99,7 +137,55 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void addChipToGroup(FlexboxLayout chipGroup, String text,int iconResId, int iconColor) {
+
+    private void filterTasksByUrgency(int urgency){
+        List<Task> filteredTasks = new ArrayList<>();
+        for (Task task : taskList) { // taskList - это полный список задач
+            if (task.getUrgency() == urgency) {
+                filteredTasks.add(task);
+            }
+        }
+        updateTask(filteredTasks);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+
+        // Наблюдение за изменениями в профиле
+        viewModel.getUserProfile().observe(getViewLifecycleOwner(), profile -> {
+            if (profile != null) {
+                Log.d("HomeFragment", "RecyclerView adapter set" + profile);
+                fetchTasksByProfession();
+            }
+        });
+
+        // Инициализация ViewModel с контекстом
+        viewModel.init(getContext(),getActivity());
+        viewModel.getUserLocation();
+        // Наблюдаем за изменениями местоположения
+        viewModel.getUserLocation().observe(getViewLifecycleOwner(), location -> {
+            if (location != null) {
+                // Местоположение доступно
+                userLocation = location;
+            } else {
+                // Используйте placeholder
+                LatLng placeholderLocation = new LatLng(0.0, 0.0);
+                userLocation = placeholderLocation;
+            }
+        });
+
+
+
+        recyclerView.setAdapter(taskAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(taskAdapter);
+
+
+    }
+
+    private void addChipToGroup(FlexboxLayout chipGroup, String text,int iconResId, int iconColor, int urgency) {
         Chip chip = new Chip(getActivity());
         chip.setText(text);
         chip.setClickable(true);
@@ -116,6 +202,14 @@ public class HomeFragment extends Fragment {
         }
         chip.setChipDrawable(chipDrawable);
 
+        // Установка обработчика нажатий
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterTasksByUrgency(urgency);
+            }
+        });
+
         chipGroup.addView(chip);
         // Создаем параметры LayoutParams и задаем отступы
         FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(
@@ -126,6 +220,7 @@ public class HomeFragment extends Fragment {
         layoutParams.setMargins(margin, margin, margin, margin);
         chip.setLayoutParams(layoutParams);
     }
+
 
     @Override
     public void onDestroyView() {

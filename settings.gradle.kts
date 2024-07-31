@@ -22,6 +22,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Register OTP"
 include(":app")
-include(":app:users")
 include(":app:companies")
 include(":common")

@@ -13,7 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.registerotp.databinding.FragmentHomepageBinding;
-import com.example.registerotp.model.FirmenModel;
+import com.example.common.model.FirmenModel;
 import com.example.registerotp.model.KundenModell;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

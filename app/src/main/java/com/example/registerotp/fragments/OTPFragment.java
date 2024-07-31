@@ -18,7 +18,7 @@ import android.view.WindowManager;
 import com.example.registerotp.MainActivity;
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentOTPBinding;
-import com.example.registerotp.model.FirmenModel;
+import com.example.common.model.FirmenModel;
 import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.utils.AndroidUtil;
 import com.example.registerotp.utils.FirebaseUtil;

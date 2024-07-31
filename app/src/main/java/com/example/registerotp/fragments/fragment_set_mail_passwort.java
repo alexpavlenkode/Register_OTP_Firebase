@@ -28,7 +28,7 @@ import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentSetKeywordsBinding;
 import com.example.registerotp.databinding.FragmentSetMailPasswortBinding;
 import com.example.registerotp.databinding.FragmentStartRegistrationFirmaBinding;
-import com.example.registerotp.model.FirmenModel;
+import com.example.common.model.FirmenModel;
 import com.example.registerotp.model.KundenModell;
 import com.example.registerotp.model.LoginModell;
 import com.example.registerotp.utils.AndroidUtil;

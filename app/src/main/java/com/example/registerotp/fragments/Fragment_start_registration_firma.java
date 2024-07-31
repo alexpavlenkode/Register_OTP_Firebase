@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentStartRegistrationBinding;
 import com.example.registerotp.databinding.FragmentStartRegistrationFirmaBinding;
-import com.example.registerotp.model.FirmenModel;
+import com.example.common.model.FirmenModel;
 import com.example.registerotp.utils.AndroidUtil;
 import com.google.firebase.auth.FirebaseAuth;
 

@@ -1,4 +1,4 @@
-package com.example.registerotp.model;
+package com.example.common.model;
 
 import android.os.Build;
 import android.os.Parcel;

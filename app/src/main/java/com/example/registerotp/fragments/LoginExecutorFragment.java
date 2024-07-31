@@ -20,7 +20,7 @@ import androidx.navigation.Navigation;
 
 import com.example.registerotp.R;
 import com.example.registerotp.databinding.FragmentLoginExecutorBinding;
-import com.example.registerotp.model.FirmenModel;
+import com.example.common.model.FirmenModel;
 import com.example.registerotp.utils.AndroidUtil;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.firestore.FirebaseFirestore;

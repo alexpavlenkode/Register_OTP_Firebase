@@ -10,6 +10,7 @@
     <string name="privatperson">Privat</string>
     <string name="gewerbe">Gewerblich</string>
     <string name="suche">Suchen</string>
+    <string name="send">Senden</string>
     <string name="emailEingabe">Dein E-Mail und Passwort</string>
     <string name="email">E-Mail-Adresse:</string>
     <string name="firmenMail">E-Mail-Adresse:</string>

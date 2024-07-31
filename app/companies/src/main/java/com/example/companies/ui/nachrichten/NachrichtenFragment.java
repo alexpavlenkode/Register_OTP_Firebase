@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.companies.R;
+import com.example.companies.SharedViewModel;
 import com.example.companies.adapter.User;
 import com.example.companies.adapter.UserAdapter;
 import com.example.companies.databinding.FragmentNachrichtenBinding;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NachrichtenFragment extends Fragment {
+    private SharedViewModel viewModel;
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
     private List<User> userList;
@@ -39,63 +41,71 @@ public class NachrichtenFragment extends Fragment {
 
         binding = FragmentNachrichtenBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+
         //// Настройка RecyclerView
         recyclerView = binding.recyclerViewTasks;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         userList = new ArrayList<>();
         userList.add(new User(
-                getString(com.example.comon.R.drawable.ic_user_placeholder), // URL фото
+                getString(com.example.common.R.drawable.ic_user_placeholder), // URL фото
                 true, // Онлайн
                 "Иван Иванов", // Имя
                 "Привет, как дела?", // Последнее сообщение
                 "10:15", // Время отправки
                 5, // Количество непрочитанных сообщений
-                User.STATUS_ACTIVE // Статус
+                User.STATUS_ACTIVE, // Статус
+                "123"
         ));
         userList.add(new User(
-                getString(com.example.comon.R.drawable.ic_user_placeholder), // URL фото
+                getString(com.example.common.R.drawable.ic_user_placeholder), // URL фото
                 false, // Не онлайн
                 "Анна Петрова", // Имя
                 "Когда встретимся?", // Последнее сообщение
                 "12:30", // Время отправки
                 2, // Количество непрочитанных сообщений
-                User.STATUS_COMPLETED // Статус
+                User.STATUS_COMPLETED, // Статус
+                "124"
         ));
         userList.add(new User(
-                getString(com.example.comon.R.drawable.ic_user_placeholder), // URL фото
+                getString(com.example.common.R.drawable.ic_user_placeholder), // URL фото
                 true, // Онлайн
                 "Сергей Смирнов", // Имя
                 "Увидел твое сообщение.", // Последнее сообщение
                 "14:45", // Время отправки
                 0, // Количество непрочитанных сообщений
-                User.STATUS_ACTIVE // Статус
+                User.STATUS_ACTIVE, // Статус
+                "125"
         ));
         userList.add(new User(
-                getString(com.example.comon.R.drawable.ic_user_placeholder), // URL фото
+                getString(com.example.common.R.drawable.ic_user_placeholder), // URL фото
                 true, // Онлайн
                 "Василий Петров", // Имя
                 "Увидел твое сообщение.", // Последнее сообщение
                 "14:45", // Время отправки
                 0, // Количество непрочитанных сообщений
-                User.STATUS_ACTIVE // Статус
+                User.STATUS_ACTIVE, // Статус
+                "126"
         ));
         userList.add(new User(
-                getString(com.example.comon.R.drawable.ic_user_placeholder), // URL фото
+                getString(com.example.common.R.drawable.ic_user_placeholder), // URL фото
                 true, // Онлайн
                 "Ольга Михайловна", // Имя
                 "Увидел твое сообщение.", // Последнее сообщение
                 "14:45", // Время отправки
                 11, // Количество непрочитанных сообщений
-                User.STATUS_ACTIVE // Статус
+                User.STATUS_ACTIVE, // Статус
+                "127"
         ));
         userList.add(new User(
-                getString(com.example.comon.R.drawable.ic_user_placeholder), // URL фото
+                getString(com.example.common.R.drawable.ic_user_placeholder), // URL фото
                 true, // Онлайн
                 "Валерий Мамаев", // Имя
                 "Увидел твое сообщение.", // Последнее сообщение
                 "14:45", // Время отправки
                 11, // Количество непрочитанных сообщений
-                User.STATUS_ACTIVE // Статус
+                User.STATUS_ACTIVE, // Статус
+                "128"
         ));
 
         // Создание и установка адаптера
@@ -105,9 +115,9 @@ public class NachrichtenFragment extends Fragment {
         FlexboxLayout chipGroupWichtigkeitNachrichten = binding.chipGroupWichtigkeitNachrichten;
         FlexboxLayout selectedWichtigkeitNachrichten = binding.selectedChipGroupWichtigkeitNachrichten;
         
-        addChipToGroup(chipGroupWichtigkeitNachrichten,getString(com.example.comon.R.string.messages_all), ContextCompat.getColor(getContext(), com.example.comon.R.color.white), com.example.comon.R.color.messages_all);
-        addChipToGroup(chipGroupWichtigkeitNachrichten,getString(com.example.comon.R.string.messages_inprogress),ContextCompat.getColor(getContext(), com.example.comon.R.color.black), com.example.comon.R.color.messages_inprogress);
-        addChipToGroup(chipGroupWichtigkeitNachrichten,getString(com.example.comon.R.string.messages_completed),ContextCompat.getColor(getContext(), com.example.comon.R.color.black), com.example.comon.R.color.messages_completed);
+        addChipToGroup(chipGroupWichtigkeitNachrichten,getString(com.example.common.R.string.messages_all), ContextCompat.getColor(getContext(), com.example.common.R.color.white), com.example.common.R.color.messages_all);
+        addChipToGroup(chipGroupWichtigkeitNachrichten,getString(com.example.common.R.string.messages_inprogress),ContextCompat.getColor(getContext(), com.example.common.R.color.black), com.example.common.R.color.messages_inprogress);
+        addChipToGroup(chipGroupWichtigkeitNachrichten,getString(com.example.common.R.string.messages_completed),ContextCompat.getColor(getContext(), com.example.common.R.color.black), com.example.common.R.color.messages_completed);
 
 
 
@@ -137,7 +147,7 @@ public class NachrichtenFragment extends Fragment {
                 FlexboxLayout.LayoutParams.WRAP_CONTENT,
                 FlexboxLayout.LayoutParams.WRAP_CONTENT
         );
-        int margin = (int) getResources().getDimension(com.example.comon.R.dimen.chip_intent_margin);
+        int margin = (int) getResources().getDimension(com.example.common.R.dimen.chip_intent_margin);
         layoutParams.setMargins(margin, margin, margin, margin);
         chip.setLayoutParams(layoutParams);
     }
