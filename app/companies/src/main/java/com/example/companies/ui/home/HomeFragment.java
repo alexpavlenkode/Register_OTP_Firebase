@@ -1,31 +1,26 @@
 package com.example.companies.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.companies.SharedViewModel;
-import com.example.companies.adapter.Task;
-import com.example.companies.adapter.TaskAdapter;
+import com.example.companies.adapter.Tiket;
+import com.example.companies.adapter.TiketAdapter;
 import com.example.companies.databinding.FragmentHomeBinding;
+import com.example.companies.repository.Location;
 import com.example.companies.repository.TaskRepository;
-import com.example.companies.ui.task.TaskDetailFragment;
-import com.example.companies.ui.task.TaskDetailViewModel;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.chip.Chip;
@@ -33,7 +28,6 @@ import com.example.common.R;
 import com.google.android.material.chip.ChipDrawable;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -41,8 +35,8 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
-    private TaskAdapter taskAdapter;
-    private List<Task> taskList;
+    private TiketAdapter tiketAdapter;
+    private List<Tiket> tiketList;
     private NavController navController;
     private SharedViewModel viewModel;
     private TaskRepository taskRepository;
@@ -61,24 +55,41 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         recyclerView = binding.recyclerViewTasks;
         taskRepository = new TaskRepository();
-        taskAdapter = new TaskAdapter(taskList,userLocation, new TaskAdapter.OnItemClickListener() {
+
+        tiketAdapter = new TiketAdapter(tiketList,userLocation, new TiketAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Task task) {
+            public void onItemClick(Tiket task) {
                 NavController navController = Navigation.findNavController(getActivity(), com.example.companies.R.id.nav_host_fragment_activity_user);
-                navController.navigate(com.example.companies.R.id.taskDetailFragment);
+                navController.navigate(com.example.companies.R.id.tiketDetailFragment);
 
             }
         });
-        taskList = new ArrayList<>();
+
+        tiketList = new ArrayList<>();
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         viewModel.fetchUserProfile();
+
         LatLng placeholderLocation = new LatLng(0.0, 0.0);
         userLocation = placeholderLocation;
 
+        Location companyLocation = new Location();
+        companyLocation.init(getContext(),getActivity());
 
-        Log.d("HomeFragment", "RecyclerView adapter set");
+        viewModel.setCompanyLocation(companyLocation.getMyLocation());
+        viewModel.getCompanyLocation().observe(getViewLifecycleOwner(), location -> {
+            if (location != null) {
+                // Местоположение доступно
+                userLocation = location;
+
+            } else {
+                // Используйте placeholder
+                userLocation = placeholderLocation;
+            }
+        });
+
 
         FlexboxLayout chipGroupWichtigkeit = binding.chipGroupWichtigkeit;
         FlexboxLayout selectedWichtigkeitChipGroup = binding.selectedChipGroupWichtigkeit;
@@ -90,6 +101,30 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+
+        // Наблюдение за изменениями в профиле
+        viewModel.getUserProfile().observe(getViewLifecycleOwner(), profile -> {
+            if (profile != null) {
+                fetchTasksByProfession();
+            }
+        });
+
+        // Инициализация ViewModel с контекстом
+        //viewModel.init(getContext(),getActivity());
+        //viewModel.getUserLocation();
+
+
+
+        recyclerView.setAdapter(tiketAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(tiketAdapter);
+
+
+    }
 
     private void fetchTasksByProfession() {
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -100,15 +135,15 @@ public class HomeFragment extends Fragment {
                     TaskRepository taskRepository = new TaskRepository(); // Инициализация вашего репозитория
                     taskRepository.getTasksByProfessions(professions, new TaskRepository.OnTasksFetchedListener() {
                         @Override
-                        public void onTasksFetched(List<Task> tasks) {
+                        public void onTasksFetched(List<Tiket> tasks) {
                             // Обновляем список задач
-                            taskList.clear();
-                            taskList.addAll(tasks);
+                            tiketList.clear();
+                            tiketList.addAll(tasks);
+                            if (tiketAdapter != null) {
 
-                            if (taskAdapter != null) {
                                 updateTask(tasks);
                             } else {
-                                Log.e("HomeFragment", "TaskAdapter is null");
+                                Log.e("HomeFragment", "TiketAdapter is null");
                             }
                         }
 
@@ -122,67 +157,28 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void updateTask(List<Task> taskList){
-        TaskAdapter taskAdapter = new TaskAdapter(taskList,userLocation, new TaskAdapter.OnItemClickListener() {
+    private void updateTask(List<Tiket> tiketList){
+        TiketAdapter tiketAdapter = new TiketAdapter(tiketList,userLocation, new TiketAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(Task task) {
+            public void onItemClick(Tiket tiket) {
+                viewModel.selectTiket(tiket);
                 NavController navController = Navigation.findNavController(getActivity(), com.example.companies.R.id.nav_host_fragment_activity_user);
-                navController.navigate(com.example.companies.R.id.taskDetailFragment);
-
-
+                navController.navigate(com.example.companies.R.id.tiketDetailFragment);
             }
         });
-        Log.d("HomeFragment", "RecyclerView adapter set");
-        recyclerView.setAdapter(taskAdapter);
+        recyclerView.setAdapter(tiketAdapter);
 
     }
 
 
     private void filterTasksByUrgency(int urgency){
-        List<Task> filteredTasks = new ArrayList<>();
-        for (Task task : taskList) { // taskList - это полный список задач
-            if (task.getUrgency() == urgency) {
-                filteredTasks.add(task);
+        List<Tiket> filteredTasks = new ArrayList<>();
+        for (Tiket tiket : tiketList) { // taskList - это полный список задач
+            if (tiket.getUrgency() == urgency) {
+                filteredTasks.add(tiket);
             }
         }
         updateTask(filteredTasks);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
-
-        // Наблюдение за изменениями в профиле
-        viewModel.getUserProfile().observe(getViewLifecycleOwner(), profile -> {
-            if (profile != null) {
-                Log.d("HomeFragment", "RecyclerView adapter set" + profile);
-                fetchTasksByProfession();
-            }
-        });
-
-        // Инициализация ViewModel с контекстом
-        viewModel.init(getContext(),getActivity());
-        viewModel.getUserLocation();
-        // Наблюдаем за изменениями местоположения
-        viewModel.getUserLocation().observe(getViewLifecycleOwner(), location -> {
-            if (location != null) {
-                // Местоположение доступно
-                userLocation = location;
-            } else {
-                // Используйте placeholder
-                LatLng placeholderLocation = new LatLng(0.0, 0.0);
-                userLocation = placeholderLocation;
-            }
-        });
-
-
-
-        recyclerView.setAdapter(taskAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(taskAdapter);
-
-
     }
 
     private void addChipToGroup(FlexboxLayout chipGroup, String text,int iconResId, int iconColor, int urgency) {

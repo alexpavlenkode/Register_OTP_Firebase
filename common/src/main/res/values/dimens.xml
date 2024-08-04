@@ -11,4 +11,5 @@
     <dimen name="chip_margin">2dp</dimen>
     <dimen name="chip_intent_margin">2dp</dimen>
     <dimen name="chip_corner_radius">15dp</dimen>
+
 </resources>

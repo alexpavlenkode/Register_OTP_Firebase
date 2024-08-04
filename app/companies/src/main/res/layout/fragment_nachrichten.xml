@@ -143,5 +143,6 @@
             android:background="@drawable/rounded_recycler_view_background"
             tools:listitem="@layout/messages_card" />
 
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,7 @@ package com.example.companies.repository;
 
 import android.util.Log;
 
-import com.example.companies.adapter.Task;
+import com.example.companies.adapter.Tiket;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -14,20 +14,19 @@ public class TaskRepository {
 
 
     public void getTasksByProfessions(List<String> professions, OnTasksFetchedListener listener) {
-        Log.e(TAG, "professions: " + professions);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("tickets")
-                .whereIn("profession", professions)
+                .whereIn("profession", professions)//TODO: Добавить фильтрацию тикетов по статусу
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        List<Task> tasks = new ArrayList<>();
-                        Log.d(TAG, "Documents found on getTasksByProfessions: " + task.getResult().size());
+                        List<Tiket> tiket = new ArrayList<>();
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Task fetchedTask = document.toObject(Task.class);
-                            tasks.add(fetchedTask);
+                            Log.d("TaskRepository", "document: " + document);
+                            Tiket fetchedTask = document.toObject(Tiket.class);
+                            tiket.add(fetchedTask);
                         }
-                        listener.onTasksFetched(tasks);
+                        listener.onTasksFetched(tiket);
                     } else {
                         listener.onError(task.getException());
                     }
@@ -35,7 +34,7 @@ public class TaskRepository {
     }
 
     public interface OnTasksFetchedListener {
-        void onTasksFetched(List<Task> tasks);
+        void onTasksFetched(List<Tiket> tasks);
         void onError(Exception e);
     }
 }

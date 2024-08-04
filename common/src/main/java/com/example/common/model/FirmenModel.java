@@ -30,7 +30,13 @@ public class FirmenModel implements Parcelable {
     private String aboutMe;
     private String legalRepresentation;
     private String imageUrl;
+
+
+
+    private List<String> chats;
     private boolean contacktEnable;
+
+
 
     public FirmenModel(
             String phone,
@@ -46,7 +52,8 @@ public class FirmenModel implements Parcelable {
             String legalRepresentation,
             int serviceRadius,
             String imageUrl,
-            boolean contacktEnable
+            boolean contacktEnable,
+            List<String> chats
     ) {
         this.phone = phone;
         this.companyName = companyName;
@@ -62,6 +69,7 @@ public class FirmenModel implements Parcelable {
         this.serviceRadius = serviceRadius;
         this.imageUrl = imageUrl;
         this.contacktEnable = contacktEnable;
+        this.chats = chats;
     }
 
     public FirmenModel() {
@@ -100,6 +108,12 @@ public class FirmenModel implements Parcelable {
             return new FirmenModel[size];
         }
     };
+    public void setChats(List<String> chats) {
+        this.chats = chats;
+    }
+    public List<String> getChats() {
+        return chats;
+    }
 
     public String getPhone() {
         return phone;

@@ -1,14 +1,14 @@
-package com.example.companies.ui.task;
+package com.example.companies.ui.tiket;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class TaskDetailViewModel extends ViewModel {
+public class TiketDetailViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public TaskDetailViewModel() {
+    public TiketDetailViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is Task Full fragment!");
     }

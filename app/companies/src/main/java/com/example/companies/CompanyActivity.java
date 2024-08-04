@@ -2,7 +2,7 @@ package com.example.companies;
 
 import android.os.Bundle;
 
-import com.example.registerotp.fragments.FirestoreHelper;
+import com.example.common.utils.FirestoreHelper;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

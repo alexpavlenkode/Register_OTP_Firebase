@@ -4,6 +4,7 @@ package com.example.companies;
 import static androidx.core.app.PendingIntentCompat.getActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -20,12 +21,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.common.model.FirmenModel;
+import com.example.common.utils.FirestoreHelper;
+import com.example.companies.ui.chat.PendingChatCreation;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.example.companies.adapter.Tiket;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,96 +40,121 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressLint("StaticFieldLeak")
 public class SharedViewModel extends ViewModel {
     private static final String TAG = "SharedViewModel";
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;
+
+    private final FirestoreHelper firestoreHelper = new FirestoreHelper();
     private final MutableLiveData<FirmenModel> userProfile = new MutableLiveData<>();
-    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private final MutableLiveData<Tiket> selectedTiket = new MutableLiveData<>();
+    private final MutableLiveData<LatLng> userLocation = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> companyChats = new MutableLiveData<>();
+    private MutableLiveData<PendingChatCreation> pendingChatCreation = new MutableLiveData<>();
 
-    private MutableLiveData<LatLng> userLocation = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> locationPermissionGranted = new MutableLiveData<>(false);
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private Context context;
-    private Activity activity;
 
-    public void init(Context context,Activity activity) {
-        this.context = context;
-        this.activity = activity;
-        checkLocationPermission(activity);
-        if (locationPermissionGranted.getValue() != null && locationPermissionGranted.getValue()) {
-            fetchUserLocation();
-        }
+    public LiveData<PendingChatCreation> getPendingChatCreation() {
+        return pendingChatCreation;
     }
-
-    private void checkLocationPermission(Activity activity) {
-        if (context != null) {
-            // Создаем список для хранения отсутствующих разрешений
-            List<String> missingPermissions = new ArrayList<>();
-
-            // Проверяем разрешение на доступ к местоположению
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                missingPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
-            }
-
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                missingPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-            }
-
-            // Если есть отсутствующие разрешения
-            if (!missingPermissions.isEmpty()) {
-                // Устанавливаем флаг в false
-                ActivityCompat.requestPermissions(activity, missingPermissions.toArray(new String[0]), LOCATION_PERMISSION_REQUEST_CODE);
-
-                // Выводим отсутствующие разрешения
-                Log.e("PermissionCheck", "Missing permissions: " + missingPermissions.toString());
-
-                // Можно также уведомить пользователя о необходимости предоставить разрешения
-                // Например, отображая сообщение или диалог
-            } else {
-                // Если все разрешения есть, устанавливаем флаг в true и получаем местоположение
-                locationPermissionGranted.setValue(true);
-                fetchUserLocation();
-            }
-        }
+    public void setPendingChatCreation(PendingChatCreation pendingChatCreation) {
+        this.pendingChatCreation.setValue(pendingChatCreation);
     }
-    public void fetchUserLocation() {
-        if (context != null && locationPermissionGranted.getValue() != null && locationPermissionGranted.getValue()) {
-            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            if (locationManager != null) {
-                Location location = null;
-                try {
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                } catch (SecurityException e) {
-                    e.printStackTrace();
-                }
-                if (location != null) {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    userLocation.setValue(latLng);
-                }
-            }
-        }
+    public void clearPendingChatCreation() {
+        this.pendingChatCreation.setValue(null);
     }
-
+    public void selectTiket(Tiket tiket) {
+        selectedTiket.setValue(tiket);
+    }
+    public void selectProfile(FirmenModel firmenModel) {
+        userProfile.setValue(firmenModel);
+    }
+    public LiveData<Tiket> getSelectedTiket() {
+        return selectedTiket;
+    }
     public LiveData<FirmenModel> getUserProfile() {
         return userProfile;
     }
     public void setUserProfile(FirmenModel profile) {
         userProfile.setValue(profile);
     }
-    public LiveData<LatLng> getUserLocation() {
+    public LiveData<LatLng> getCompanyLocation() {
         return userLocation;
     }
-    public LiveData<Boolean> isLocationPermissionGranted() {
-        return locationPermissionGranted;
+    public LiveData<List<String>> getCompanyChats() {
+        return companyChats;
     }
 
-    // Метод для обновления местоположения, если разрешения уже есть
-    public void updateLocation() {
-        if (locationPermissionGranted.getValue() != null && locationPermissionGranted.getValue()) {
-            fetchUserLocation();
-        }
+    public void setCompanyLocation(LatLng location) {
+        Log.e("setCompanyLocation", "setCompanyLocation Seted ");
+        userLocation.setValue(location);
+    }
+
+    public void updateTicketChats(String ticketId, List<String> updatedChats) {
+        firestoreHelper.updateTicketChats(ticketId, updatedChats, new FirestoreHelper.OnUpdateCompleteListener() {
+            @Override
+            public void onUpdateComplete() {
+                compareAndUpdateChats(ticketId);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e(TAG, "Error updating ticket chats", e);
+            }
+        });
+    }
+    private void compareAndUpdateChats(String ticketId) {
+        firestoreHelper.getChatsFromTicket(ticketId, new FirestoreHelper.OnChatsFetchedListener() {
+            @Override
+            public void onChatsFetched(List<String> ticketChats) {
+                FirmenModel currentProfile = userProfile.getValue();
+                if (currentProfile != null) {
+                    List<String> currentChats = currentProfile.getChats();
+                    if (currentChats == null) {
+                        currentChats = new ArrayList<>();
+                    }
+
+                    // Сравните текущие чаты с чатиками из тикета
+                    if (!currentChats.equals(ticketChats)) {
+                        // Если есть изменения, обновите чаты в userProfile
+                        currentProfile.setChats(ticketChats);
+                        setUserProfile(currentProfile);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e(TAG, "Error fetching chats from ticket", e);
+            }
+        });
+    }
+    // Получение чатов компании
+    public void getChatsFromCompany(String companyId) {
+        firestoreHelper.getChatsFromCompany(companyId, new FirestoreHelper.OnChatsFetchedListener() {
+            @Override
+            public void onChatsFetched(List<String> companyChats) {
+                FirmenModel currentProfile = userProfile.getValue();
+                if (currentProfile != null) {
+                    List<String> currentChats = currentProfile.getChats();
+                    if (currentChats == null) {
+                        currentChats = new ArrayList<>();
+                    }
+
+                    // Если чаты компании изменились, обновите профиль
+                    if (!currentChats.equals(companyChats)) {
+                        currentProfile.setChats(companyChats);
+                        setUserProfile(currentProfile);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e(TAG, "Error fetching chats from company", e);
+            }
+        });
     }
 
     public void fetchUserProfile() {
@@ -143,7 +173,6 @@ public class SharedViewModel extends ViewModel {
                         if (document.exists()) {
                             //Теперь нужно создать FirmenModel
                             FirmenModel profile = document.toObject(FirmenModel.class);
-                            Log.d("Start Connect","to Firestore");
                             if(profile != null){
                                 setUserProfile(profile);
                             }else{

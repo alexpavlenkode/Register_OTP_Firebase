@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_taskDetailFragment"
-            app:destination="@id/taskDetailFragment" />
+            app:destination="@id/tiketDetailFragment" />
     </fragment>
 
     <fragment
@@ -34,7 +34,15 @@
         tools:layout="@layout/fragment_profile" />
 
     <fragment
-        android:id="@+id/taskDetailFragment"
-        android:name="com.example.companies.ui.task.TaskDetailFragment"
-        tools:layout="@layout/fragment_task_detail" />
+        android:id="@+id/tiketDetailFragment"
+        android:name="com.example.companies.ui.tiket.TiketDetailFragment"
+        tools:layout="@layout/fragment_task_detail" >
+        <action
+            android:id="@+id/action_htiketDetail_to_chatFragment"
+            app:destination="@id/chatRoomFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatRoomFragment"
+        android:name="com.example.companies.ui.chat.ChatFragment"
+        tools:layout="@layout/fragment_chat" />
 </navigation>
