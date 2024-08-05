@@ -17,7 +17,10 @@ public class User {
 
 
 
-    public User(String photoUrl, boolean isOnline, String name, String lastMessage, String messageTime, int unreadCount, int status, String userId) {
+    public User(String photoUrl,
+                boolean isOnline,
+                String name,
+                String lastMessage, String messageTime, int unreadCount, int status, String userId) {
         this.photoUrl = photoUrl;
         this.isOnline = isOnline;
         this.name = name;

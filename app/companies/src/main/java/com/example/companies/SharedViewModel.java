@@ -22,6 +22,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.common.model.FirmenModel;
 import com.example.common.utils.FirestoreHelper;
+import com.example.companies.ui.chat.ChatMessageModel;
+import com.example.companies.ui.chat.ChatroomModel;
+import com.example.companies.ui.chat.NachrichtenModel;
 import com.example.companies.ui.chat.PendingChatCreation;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -52,9 +55,47 @@ public class SharedViewModel extends ViewModel {
     private final MutableLiveData<Tiket> selectedTiket = new MutableLiveData<>();
     private final MutableLiveData<LatLng> userLocation = new MutableLiveData<>();
     private final MutableLiveData<List<String>> companyChats = new MutableLiveData<>();
-    private MutableLiveData<PendingChatCreation> pendingChatCreation = new MutableLiveData<>();
+    private final MutableLiveData<PendingChatCreation> pendingChatCreation = new MutableLiveData<>();
+    private final MutableLiveData<ChatroomModel> chatroomModel = new MutableLiveData<>();
+    private final MutableLiveData<List<NachrichtenModel>> nachrichtenModel = new MutableLiveData<>();
+    private final MutableLiveData<ChatMessageModel> chatMessageModel = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isChatFound = new MutableLiveData<>();
+
+    public void clearChatData() {
+        chatroomModel.setValue(null);
+        chatMessageModel.setValue(null);
+        setChatFound(false);
+        clearPendingChatCreation();
+    }
+    public void destroySelectedTicket() {
+        selectedTiket.setValue(null);
+    }
+    public void clearTiketDetailFragment() {
+
+    }
 
 
+
+    public LiveData<Boolean> isChatFound() {
+        return isChatFound;
+    }
+
+    public void setChatFound(boolean found) {
+        isChatFound.setValue(found);
+    }
+
+    public MutableLiveData<ChatroomModel> getChatroomModel() {
+        return chatroomModel;
+    }
+    public void setChatroomModel(ChatroomModel chatroomModel) {
+        this.chatroomModel.setValue(chatroomModel);
+    }
+    public void setNachrichtenModel(List<NachrichtenModel> nachrichtenModel){
+        this.nachrichtenModel.setValue(nachrichtenModel);
+    }
+    public LiveData<List<NachrichtenModel>> getNachrichtenModels() {
+        return nachrichtenModel;
+    }
     public LiveData<PendingChatCreation> getPendingChatCreation() {
         return pendingChatCreation;
     }
@@ -131,7 +172,7 @@ public class SharedViewModel extends ViewModel {
         });
     }
     // Получение чатов компании
-    public void getChatsFromCompany(String companyId) {
+    /*public void getChatsFromCompany(String companyId) {
         firestoreHelper.getChatsFromCompany(companyId, new FirestoreHelper.OnChatsFetchedListener() {
             @Override
             public void onChatsFetched(List<String> companyChats) {
@@ -155,7 +196,7 @@ public class SharedViewModel extends ViewModel {
                 Log.e(TAG, "Error fetching chats from company", e);
             }
         });
-    }
+    }*/
 
     public void fetchUserProfile() {
         mAuth = FirebaseAuth.getInstance();

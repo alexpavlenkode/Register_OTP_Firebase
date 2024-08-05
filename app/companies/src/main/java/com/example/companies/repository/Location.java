@@ -23,7 +23,6 @@ public class Location {
     private boolean locationPermissionGranted;
     private LatLng userLocation;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private SharedViewModel viewModel;
 
     public void init(Context context,Activity activity) {
         this.context = context;

@@ -15,6 +15,7 @@ import java.util.Locale;
 public class Tiket {
     //public int imageResId; // Ресурс изображения иконки
     private String ticketId;
+    private String userId;
     private String title; // Заголовок
     private String description; // Описание
     private int views; // Количество просмотров
@@ -40,8 +41,11 @@ public class Tiket {
         return ticketId;
     }
 
+
+
     public Tiket(int imageResId,
                  String ticketId,
+                 String userId,
                  String title,
                  String description,
                  int views,
@@ -51,9 +55,11 @@ public class Tiket {
                  int urgency,
                  GeoPoint geopoint,
                  Timestamp start_time, Timestamp end_time,
-                 List<String> chats) {
+                 List<String> chats,
+                 String distance) {
         //this.imageResId = imageResId;
         this.ticketId = ticketId;
+        this.userId = userId;
         this.title = title;
         this.description = description;
         this.views = views;
@@ -65,6 +71,7 @@ public class Tiket {
         this.start_time = start_time; // Период времени для посещения на КФ
         this.end_time = end_time;   // Период времени для посещения на КФ
         this.chats = chats;
+        this.distance = distance;
     }
 
     /*//public void setImageResId(int imageResId) {
@@ -74,6 +81,14 @@ public class Tiket {
     public int getImageResId() {
         return imageResId;
     }*/
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     public List<String> getChats() {
         return chats;
     }
@@ -149,14 +164,22 @@ public class Tiket {
         this.urgency = urgency;
     }
 
-
+    //Получаем локацию содания тикета
     public GeoPoint getLocation() {
         return geopoint;
     }
-
-    public void setLocation(GeoPoint location) {
-        this.geopoint = location;
+    //Устанавливаем локацию создания тикета
+    public void setLocation(GeoPoint locationUser) {
+        this.geopoint = locationUser;
     }
+    public void setDistance(LatLng locationCompany){
+        this.distance = getDistanceTo(locationCompany);
+    }
+    public String getDistance(){
+        return distance;
+    }
+
+
 
     // Метод для получения расстояния от переданных координат пользователя
     public String getDistanceTo(LatLng CompanyLocation) {

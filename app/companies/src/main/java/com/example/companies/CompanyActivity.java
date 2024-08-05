@@ -42,7 +42,7 @@ public class CompanyActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_user);
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navViewCorp, navController);
+        NavigationUI.setupWithNavController(navView, navController);
     }
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 }

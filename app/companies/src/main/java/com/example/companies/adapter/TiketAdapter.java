@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.companies.R;
+import com.example.companies.ui.chat.ChatroomModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 
@@ -31,10 +32,9 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TaskViewHold
         void onItemClick(Tiket task);
     }
 
-    public TiketAdapter(List<Tiket> tiketList, LatLng userLocation, OnItemClickListener onItemClickListener){
+    public TiketAdapter(List<Tiket> tiketList, OnItemClickListener onItemClickListener){
         this.tiketList = tiketList;
         this.onItemClickListener = onItemClickListener;
-        this.userLocation = userLocation;
 
     }
     @NonNull
@@ -113,11 +113,12 @@ public class TiketAdapter extends RecyclerView.Adapter<TiketAdapter.TaskViewHold
             title.setText(tiket.getTitle());
             description.setText(tiket.getDescription());
             time.setText(tiket.getTimeAgo());
-            if (userLocation != null) {
+            distance.setText(tiket.getDistance());
+            /*if (userLocation != null) {
                 distance.setText(tiket.getDistanceTo(userLocation));
             }else {
                 distance.setText("--");
-            }
+            }*/
             views.setText(String.valueOf(tiket.getViews()));
             if(tiket.getUrgency() == 1){
                 urgency.setImageResource(com.example.common.R.drawable.hot);

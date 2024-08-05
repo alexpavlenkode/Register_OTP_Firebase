@@ -1,6 +1,7 @@
 [versions]
 agp = "8.1.0"
 firebaseBom = "32.7.3"
+firebaseDatabase = "21.0.0"
 flexbox = "3.0.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -10,7 +11,7 @@ material = "1.12.0"
 activity = "1.8.2"
 constraintlayout = "2.1.4"
 googleServices = "4.4.1"
-firebaseFirestore = "24.10.3"
+firebaseFirestore = "25.0.0"
 annotation = "1.7.1"
 lifecycleLivedataKtx = "2.7.0"
 lifecycleViewmodelKtx = "2.7.0"
@@ -23,6 +24,7 @@ compose-bom = "2023.03.00"
 
 [libraries]
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-database = { module = "com.google.firebase:firebase-database", version.ref = "firebaseDatabase" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

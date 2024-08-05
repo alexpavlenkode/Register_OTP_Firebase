@@ -87,7 +87,6 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-
     implementation ("com.google.android.flexbox:flexbox:3.0.0")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage:20.3.0")
@@ -103,5 +102,6 @@ dependencies {
     implementation ("com.github.dhaval2404:imagepicker:2.1")
 
     implementation ("com.github.bumptech.glide:glide:4.15.1")
+    implementation ("com.google.firebase:firebase-database:19.2.0")
 
 }

@@ -41,7 +41,6 @@ public class HomeFragment extends Fragment {
     private SharedViewModel viewModel;
     private TaskRepository taskRepository;
     private List<String> professions;
-    private LatLng userLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,9 +56,11 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         recyclerView = binding.recyclerViewTasks;
-        taskRepository = new TaskRepository();
+        taskRepository = new TaskRepository(getActivity());
+        // Передача текущего контекста и активности
+        taskRepository.initializeLocation(getContext(), getActivity());
 
-        tiketAdapter = new TiketAdapter(tiketList,userLocation, new TiketAdapter.OnItemClickListener() {
+        tiketAdapter = new TiketAdapter(tiketList, new TiketAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Tiket task) {
                 NavController navController = Navigation.findNavController(getActivity(), com.example.companies.R.id.nav_host_fragment_activity_user);
@@ -71,25 +72,6 @@ public class HomeFragment extends Fragment {
         tiketList = new ArrayList<>();
         viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         viewModel.fetchUserProfile();
-
-        LatLng placeholderLocation = new LatLng(0.0, 0.0);
-        userLocation = placeholderLocation;
-
-        Location companyLocation = new Location();
-        companyLocation.init(getContext(),getActivity());
-
-        viewModel.setCompanyLocation(companyLocation.getMyLocation());
-        viewModel.getCompanyLocation().observe(getViewLifecycleOwner(), location -> {
-            if (location != null) {
-                // Местоположение доступно
-                userLocation = location;
-
-            } else {
-                // Используйте placeholder
-                userLocation = placeholderLocation;
-            }
-        });
-
 
         FlexboxLayout chipGroupWichtigkeit = binding.chipGroupWichtigkeit;
         FlexboxLayout selectedWichtigkeitChipGroup = binding.selectedChipGroupWichtigkeit;
@@ -114,25 +96,17 @@ public class HomeFragment extends Fragment {
         });
 
         // Инициализация ViewModel с контекстом
-        //viewModel.init(getContext(),getActivity());
-        //viewModel.getUserLocation();
-
-
-
         recyclerView.setAdapter(tiketAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(tiketAdapter);
-
-
     }
-
     private void fetchTasksByProfession() {
         SharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         viewModel.getUserProfile().observe(getViewLifecycleOwner(), profile -> {
             if (profile != null) {
                 List<String> professions = profile.getProfessions();
                 if (professions != null && !professions.isEmpty()) {
-                    TaskRepository taskRepository = new TaskRepository(); // Инициализация вашего репозитория
+                    TaskRepository taskRepository = new TaskRepository(getActivity()); // Инициализация вашего репозитория
                     taskRepository.getTasksByProfessions(professions, new TaskRepository.OnTasksFetchedListener() {
                         @Override
                         public void onTasksFetched(List<Tiket> tasks) {
@@ -140,13 +114,11 @@ public class HomeFragment extends Fragment {
                             tiketList.clear();
                             tiketList.addAll(tasks);
                             if (tiketAdapter != null) {
-
                                 updateTask(tasks);
                             } else {
                                 Log.e("HomeFragment", "TiketAdapter is null");
                             }
                         }
-
                         @Override
                         public void onError(Exception e) {
                             Log.e("HomeFragment", "Error fetching tasks: " + e.getMessage());
@@ -158,7 +130,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateTask(List<Tiket> tiketList){
-        TiketAdapter tiketAdapter = new TiketAdapter(tiketList,userLocation, new TiketAdapter.OnItemClickListener() {
+        TiketAdapter tiketAdapter = new TiketAdapter(tiketList, new TiketAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Tiket tiket) {
                 viewModel.selectTiket(tiket);

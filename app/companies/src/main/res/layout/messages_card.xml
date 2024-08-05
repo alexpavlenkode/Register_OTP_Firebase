@@ -108,6 +108,7 @@
                 android:layout_alignParentTop="true"
                 app:chipBackgroundColor="@color/messages_inprogress"
                 app:iconTint="@android:color/white"
+                android:text="@string/urgent"
                 app:closeIconVisible="false"
                 app:chipCornerRadius="20dp"
                 android:clickable="false"

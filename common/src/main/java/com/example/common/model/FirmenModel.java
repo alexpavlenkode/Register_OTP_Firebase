@@ -30,9 +30,6 @@ public class FirmenModel implements Parcelable {
     private String aboutMe;
     private String legalRepresentation;
     private String imageUrl;
-
-
-
     private List<String> chats;
     private boolean contacktEnable;
 
