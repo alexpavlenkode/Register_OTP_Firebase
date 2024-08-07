@@ -31,13 +31,20 @@
     <string name="messages_all">Alle Nachrichten</string>
     <string name="messages_inprogress">In Arbeit</string>
     <string name="messages_completed">Erledigt</string>
-
+    <string name="select_time">Выбрать время</string>
+    <string name="profsettings">Redaktieren</string>
+    <string-array name="kv_anfrage_messages">
+        <item>Hallo!</item>
+        <item>Kurz bevor wir starten, wähle bitte Datum und Uhrzeit für den Kostenvoranschlag aus.</item>
+        <item> </item>
+    </string-array>
 
 
     <string name="task_title">Поменять лампочку</string>
     <string name="beschreibung">BESCHREIBUNG</string>
     <string name="adresse">ADRESSE</string>
     <string name="link_to_map">WEGBESCHREIBUNG</string>
+    <string name="skills">SKILLS</string>
 
 
     <string name="hallo_name">Alex\nPavlenko 👋</string>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="5dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_user_placeholder" />
+            <!-- Индикатор онлайн -->
+            <View
+                android:id="@+id/online_indicator"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/online_indicator_background"
+                android:layout_margin="0dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_rounded_corner_black"
+            android:backgroundTint="@color/chat_color_sender"
+            android:padding="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="80dp"
+            android:id="@+id/left_chat_system_layout"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:fontFamily="@font/gilroy_light"
+                android:text="Hello"
+                android:id="@+id/left_chat_system_textview"/>
+
+            <LinearLayout
+                android:id="@+id/buttons_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <Button
+                    android:layout_width="128dp"
+                    android:layout_height="28dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="4dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:fontFamily="@font/gilroy_light"
+                    android:textSize="14sp"
+                    android:text="10:00 - 20:00"
+                    android:background="@drawable/rounded_background_selecttime"
+                    android:id="@+id/button1" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

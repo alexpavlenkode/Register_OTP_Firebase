@@ -29,14 +29,15 @@
     <color name="description_title">#9D9CB1</color>
     <color name="link_map">#694FEF</color>
 
+    <color name="link_website">#2C4FCF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+    <color name="button_edit">#F1F1F8</color>
     <color name="off_white">#FAFAFA</color>
     <color name="light_gray">#C3C3C3</color>
     <color name="button_not_clicked">#694FEF</color>
     <color name="blue_link">#1E1E1E</color>
-    <color name="chat_color_sender">#1E88E5</color>
+    <color name="chat_color_sender">#2C4FCF</color>
     <color name="chat_color_receiver">#7CB342</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

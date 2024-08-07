@@ -26,6 +26,7 @@ import com.example.companies.ui.chat.ChatMessageModel;
 import com.example.companies.ui.chat.ChatroomModel;
 import com.example.companies.ui.chat.NachrichtenModel;
 import com.example.companies.ui.chat.PendingChatCreation;
+import com.example.companies.ui.chat.SystemChatMessageModel;
 import com.example.registerotp.utils.FirebaseUtil;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -60,6 +61,8 @@ public class SharedViewModel extends ViewModel {
     private final MutableLiveData<List<NachrichtenModel>> nachrichtenModel = new MutableLiveData<>();
     private final MutableLiveData<ChatMessageModel> chatMessageModel = new MutableLiveData<>();
     private MutableLiveData<Boolean> isChatFound = new MutableLiveData<>();
+    private final MutableLiveData<SystemChatMessageModel> SystemChatMessages = new MutableLiveData<>();
+
 
     public void clearChatData() {
         chatroomModel.setValue(null);
@@ -67,14 +70,25 @@ public class SharedViewModel extends ViewModel {
         setChatFound(false);
         clearPendingChatCreation();
     }
+    public LiveData<SystemChatMessageModel> getSystemChatMessages() {
+        return SystemChatMessages;
+    }
+
+    public void addSystemMessageToChat(SystemChatMessageModel message) {
+        // Логика для добавления сообщения в текущий список сообщений
+
+        SystemChatMessages.setValue(message);
+
+        // Обновление чата с новым сообщением в базе данных, если нужно
+        // sendMessageToChat(chatId, message);
+    }
+
     public void destroySelectedTicket() {
         selectedTiket.setValue(null);
     }
     public void clearTiketDetailFragment() {
 
     }
-
-
 
     public LiveData<Boolean> isChatFound() {
         return isChatFound;
@@ -87,18 +101,23 @@ public class SharedViewModel extends ViewModel {
     public MutableLiveData<ChatroomModel> getChatroomModel() {
         return chatroomModel;
     }
+
     public void setChatroomModel(ChatroomModel chatroomModel) {
         this.chatroomModel.setValue(chatroomModel);
     }
+
     public void setNachrichtenModel(List<NachrichtenModel> nachrichtenModel){
         this.nachrichtenModel.setValue(nachrichtenModel);
     }
+
     public LiveData<List<NachrichtenModel>> getNachrichtenModels() {
         return nachrichtenModel;
     }
+
     public LiveData<PendingChatCreation> getPendingChatCreation() {
         return pendingChatCreation;
     }
+
     public void setPendingChatCreation(PendingChatCreation pendingChatCreation) {
         this.pendingChatCreation.setValue(pendingChatCreation);
     }

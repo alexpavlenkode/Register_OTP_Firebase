@@ -2,33 +2,41 @@ package com.example.companies.ui.chat;
 
 import com.google.firebase.Timestamp;
 
-public class ChatMessageModel {
+import java.util.List;
+
+public class SystemChatMessageModel {
     private String message;
     private String senderId;
     private Timestamp timestamp;
-    private boolean isSystemMessage;
+    private boolean isTyping;
+    private List<String> buttons;
 
-    public ChatMessageModel() {
+    public SystemChatMessageModel() {
         // Пустой конструктор для Firestore
     }
 
-
-
-    public ChatMessageModel(String message, String senderId, Timestamp timestamp, boolean isSystemMessage) {
+    public SystemChatMessageModel(String message, String senderId, Timestamp timestamp,List<String> buttons) {
         this.message = message;
         this.senderId = senderId;
         this.timestamp = timestamp;
-        this.isSystemMessage = isSystemMessage;
+        this.buttons = buttons;
     }
 
-    public boolean isSystemMessage() {
-        return isSystemMessage;
+    public List<String> getButtons() {
+        return buttons;
     }
 
-    public void setSystemMessage(boolean systemMessage) {
-        isSystemMessage = systemMessage;
+    public void setButtons(List<String> buttons) {
+        this.buttons = buttons;
     }
 
+    public boolean isTyping() {
+        return isTyping;
+    }
+
+    public void setTyping(boolean typing) {
+        isTyping = typing;
+    }
     // Геттеры и сеттеры
     public String getMessage() {
         return message;
@@ -54,4 +62,3 @@ public class ChatMessageModel {
         this.timestamp = timestamp;
     }
 }
-

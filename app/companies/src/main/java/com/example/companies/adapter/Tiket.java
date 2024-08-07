@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class Tiket {
     //public int imageResId; // Ресурс изображения иконки
@@ -28,6 +29,8 @@ public class Tiket {
     private GeoPoint geopoint; // Координаты местоположения
     private  String distance; //Расстояние до места
     private List<String> chats;
+    private boolean kostenVoranschlag;
+    private Map<String, Map<String, Object>> preferredTimes;
 
 
 
@@ -40,6 +43,7 @@ public class Tiket {
     public String getTicketId() {
         return ticketId;
     }
+
 
 
 
@@ -56,7 +60,9 @@ public class Tiket {
                  GeoPoint geopoint,
                  Timestamp start_time, Timestamp end_time,
                  List<String> chats,
-                 String distance) {
+                 String distance,
+                 boolean kostenVoranschlag,
+                 Map<String, Map<String, Object>> preferredTimes) {
         //this.imageResId = imageResId;
         this.ticketId = ticketId;
         this.userId = userId;
@@ -72,6 +78,38 @@ public class Tiket {
         this.end_time = end_time;   // Период времени для посещения на КФ
         this.chats = chats;
         this.distance = distance;
+        this.kostenVoranschlag = kostenVoranschlag;
+        this.preferredTimes = preferredTimes;
+    }
+
+
+    public Map<String, Map<String, Object>> getPreferredTimes() {
+        return preferredTimes;
+    }
+
+    // Сеттер для preferredTimes
+    public void setPreferredTimes(Map<String, Map<String, Object>> preferredTimes) {
+        this.preferredTimes = preferredTimes;
+    }
+
+    // Метод для получения времени и интервала из preferredTimes
+    public Map<String, Object> getTimeSlot(String key) {
+        return preferredTimes != null ? preferredTimes.get(key) : null;
+    }
+
+    // Метод для установки времени и интервала в preferredTimes
+    public void setTimeSlot(String key, Map<String, Object> timeSlot) {
+        if (preferredTimes != null) {
+            preferredTimes.put(key, timeSlot);
+        }
+    }
+
+    public boolean isKostenVoranschlag() {
+        return kostenVoranschlag;
+    }
+
+    public void setKostenVoranschlag(boolean kostenVoranschlag) {
+        this.kostenVoranschlag = kostenVoranschlag;
     }
 
     /*//public void setImageResId(int imageResId) {

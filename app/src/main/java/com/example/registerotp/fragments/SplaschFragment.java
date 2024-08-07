@@ -1,5 +1,7 @@
 package com.example.registerotp.fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
@@ -13,6 +15,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +38,7 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +59,48 @@ public class SplaschFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentSplaschBinding.inflate(inflater, container, false);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Пример данных
+        // Пример данных
+        /*Map<String, Object> timeSlot1 = new HashMap<>();
+        timeSlot1.put("date", "August 17, 2024");
+        timeSlot1.put("startTime", "10:00");
+        timeSlot1.put("endTime", "12:00");
+
+        Map<String, Object> timeSlot2 = new HashMap<>();
+        timeSlot2.put("date", "August 8, 2024");
+        timeSlot2.put("startTime", "14:00");
+        timeSlot2.put("endTime", "16:00");
+
+        Map<String, Object> timeSlot3 = new HashMap<>();
+        timeSlot3.put("date", "August 9, 2024");
+        timeSlot3.put("startTime", "17:00");
+        timeSlot3.put("endTime", "19:00");
+
+        // Вся информация о временных интервалах
+        Map<String, Object> preferredTimes = new HashMap<>();
+        preferredTimes.put("timeSlot1", timeSlot1);
+        preferredTimes.put("timeSlot2", timeSlot2);
+        preferredTimes.put("timeSlot3", timeSlot3);
+
+        // Путь к документу
+        String ticketId = "0HJxPzVKT3CSiErMdC13";
+        DocumentReference ticketRef = db.collection("tickets").document(ticketId);
+
+        // Запись данных
+        Map<String, Object> data = new HashMap<>();
+        data.put("preferredTimes", preferredTimes);
+
+        ticketRef.update(data)
+                .addOnSuccessListener(aVoid -> {
+                    // Успешно записано
+                    Log.d(TAG, "Data successfully written!");
+                })
+                .addOnFailureListener(e -> {
+                    // Ошибка записи
+                    Log.e(TAG, "Error writing data: ", e);
+                });*/
 
 
         /*firestoreHelper = new FirestoreHelper();

@@ -27,6 +27,7 @@ import com.example.common.model.FirmenModel;
 import com.example.common.utils.FirestoreHelper;
 import com.example.companies.SharedViewModel;
 import com.example.companies.adapter.ChatRecyclerAdapter;
+import com.example.companies.adapter.SystemMessageAdapter;
 import com.example.companies.adapter.Tiket;
 import com.example.companies.adapter.TiketAdapter;
 import com.example.companies.databinding.FragmentChatBinding;
@@ -45,6 +46,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*
+* 1. При запуске происходит проверка, существует ли чат Строка 127
+* 2. Далее в зависимости новый это чат или нет, создаётся комната 173
+* 3.
+* */
 public class ChatFragment extends Fragment {
     private FragmentChatBinding binding;
     private NavController navController;
@@ -65,6 +71,8 @@ public class ChatFragment extends Fragment {
     private DatabaseReference messagesRef;
     private List<ChatMessageModel> chatMessages = new ArrayList<>();
     private static final String TAG = "ChatFragment";
+    private SystemMessageAdapter systemMessageAdapter;
+    private List<SystemChatMessageModel> systemMessages = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,10 +88,12 @@ public class ChatFragment extends Fragment {
         View view = binding.getRoot();
         // Инициализация SharedViewModel
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        chatRepository = new ChatRepository(new FirestoreHelper(), sharedViewModel);
+        chatRepository = new ChatRepository(requireActivity(), new FirestoreHelper(), sharedViewModel);
 
         recyclerView = binding.recyclerChatTasks;
         chatRecycler = binding.chatRecyclerView;
+        messageInput = binding.chatMessageInput;
+        sendButton = binding.messageSendBtn;
 
         // Инициализация адаптера с пустым списком
         tiketAdapter = new TiketAdapter(new ArrayList<>(), this::onTiketClick);
@@ -93,17 +103,7 @@ public class ChatFragment extends Fragment {
     }
 
 
-    private void onTiketClick(Tiket tiket) {
-    }
 
-    private void updateTiket(List<Tiket> tiketList){
-            TiketAdapter tiketAdapter = new TiketAdapter(tiketList, new TiketAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(Tiket tiket) {
-                }
-            });
-        recyclerView.setAdapter(tiketAdapter);
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
@@ -118,8 +118,7 @@ public class ChatFragment extends Fragment {
         });
 
 
-        messageInput = binding.chatMessageInput;
-        sendButton = binding.messageSendBtn;
+
 
         sharedViewModel.getSelectedTiket().observe(getViewLifecycleOwner(),tiket ->{
             if (tiket == null) {
@@ -139,11 +138,13 @@ public class ChatFragment extends Fragment {
         } );
 
 
+
+
         sendButton.setOnClickListener(v -> {
             String messageContent = messageInput.getText().toString().trim();
             if(!messageContent.isEmpty()){
                 if(firstChat){
-                    chatRepository.sendFirstMessage(messageContent);
+                    chatRepository.sendFirstMessage(messageContent,false);
                     messageInput.setText("");
                 }else{
                     chatRepository.sendMessageToExistingChat(sharedViewModel.getChatroomModel().getValue().getChatroomId(),messageContent);
@@ -153,6 +154,12 @@ public class ChatFragment extends Fragment {
                 //chatRepository.sendMessage(messageContent);
                 messageInput.setText("");
             }
+        });
+        sharedViewModel.getSystemChatMessages().observe(getViewLifecycleOwner(), message ->{
+            setupRecyclerView();
+            Log.e("ChatFragment", "message " + message.getButtons() + message.getMessage());
+            systemMessages.add(message);
+            systemMessageAdapter.notifyDataSetChanged();
         });
 
         sharedViewModel.getSelectedTiket().observe(getViewLifecycleOwner(), selectedTiket -> {
@@ -178,8 +185,17 @@ public class ChatFragment extends Fragment {
 
         });
 
+    }
+    private void onTiketClick(Tiket tiket) {
+    }
 
-
+    private void updateTiket(List<Tiket> tiketList){
+        TiketAdapter tiketAdapter = new TiketAdapter(tiketList, new TiketAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Tiket tiket) {
+            }
+        });
+        recyclerView.setAdapter(tiketAdapter);
     }
     private void setupRealtimeDatabaseListeners() {
 
@@ -213,6 +229,14 @@ public class ChatFragment extends Fragment {
                 // Обработка ошибок
             }
         });
+    }
+
+    private void setupRecyclerView() {
+        chatRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        systemMessageAdapter = new SystemMessageAdapter(getContext(),sharedViewModel,systemMessages);
+
+        chatRecycler.setAdapter(systemMessageAdapter);
     }
 
     private void setupChatRecyclerView() {

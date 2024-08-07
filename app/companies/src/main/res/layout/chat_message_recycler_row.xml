@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="Hello"
             android:id="@+id/left_chat_textview"/>
     </LinearLayout>
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:text="Hello"
             android:id="@+id/right_chat_textview"/>
     </LinearLayout>

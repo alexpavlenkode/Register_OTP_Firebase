@@ -130,9 +130,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_recycler_view_background"
             tools:listitem="@layout/task_card" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="159dp" />
     </LinearLayout>
 
 

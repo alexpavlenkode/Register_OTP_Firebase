@@ -137,7 +137,7 @@ public class FirestoreHelper {
                 });
     }
 
-    public void createChat(String ticketId, String userId, String companyId, OnChatCreatedListener listener) {
+    public void createChat(String ticketId, String userId, String companyId,boolean isSystem, OnChatCreatedListener listener) {
         // Генерируем новый идентификатор для чата
         DocumentReference newChatRef = db.collection("chats").document();
         String chatId = newChatRef.getId();
@@ -149,6 +149,7 @@ public class FirestoreHelper {
         chatData.put("userId", userId);
         chatData.put("companyId", companyId);
         chatData.put("timestamp", FieldValue.serverTimestamp());
+        chatData.put("isSystemMessage", isSystem);
         // Создаем новый чат в Firestore
         newChatRef.set(chatData)
                 .addOnSuccessListener(aVoid -> {
